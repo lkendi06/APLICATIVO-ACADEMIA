@@ -1,3 +1,7 @@
+import { env } from '@/lib/env';
+
+const serverHost = () => env.supabaseUrl.replace(/^https?:\/\//, '') || '(não configurado)';
+
 /** Converte erros técnicos em mensagens claras em português. */
 export function friendlyError(error: unknown): string {
   const raw =
@@ -31,12 +35,15 @@ export function friendlyError(error: unknown): string {
     code === 'over_request_rate_limit'
   )
     return 'Muitas tentativas em pouco tempo. Aguarde um minuto e tente novamente.';
+  if (msg.includes('hostname could not be found') || msg.includes('enotfound'))
+    return `Não foi possível encontrar o servidor ${serverHost()}. Confira a URL no arquivo .env e reinicie com "npx expo start -c".`;
   if (
     msg.includes('network request failed') ||
     msg.includes('failed to fetch') ||
+    msg.includes('fetch failed') ||
     msg.includes('network')
   )
-    return 'Sem conexão com o servidor. Verifique sua internet.';
+    return `Sem conexão com o servidor (${serverHost()}). Verifique sua internet.`;
   if (code === 'otp_expired' || msg.includes('expired'))
     return 'Este link expirou. Solicite um novo.';
   if (code === '23505') return 'Este registro já existe.';
