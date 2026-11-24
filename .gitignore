@@ -1,0 +1,46 @@
+# Dependências
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Builds nativos (gerados pelo Expo prebuild)
+/ios
+/android
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Chaves e certificados
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Variáveis de ambiente
+.env
+.env*.local
+
+# macOS
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs e cobertura
+*.log
+coverage/
