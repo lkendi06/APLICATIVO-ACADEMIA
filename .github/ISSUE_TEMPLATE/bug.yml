@@ -22,7 +22,7 @@ body:
     id: device
     attributes:
       label: Aparelho e sistema
-      placeholder: ex.: Pixel 7, Android 15 / iPhone 14, iOS 19
+      placeholder: 'ex.: Pixel 7, Android 15 / iPhone 14, iOS 19'
   - type: textarea
     id: logs
     attributes:
