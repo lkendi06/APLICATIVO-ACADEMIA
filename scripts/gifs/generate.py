@@ -34,6 +34,20 @@ def to_palette(frames: list[Image.Image]) -> list[Image.Image]:
     return [f.quantize(palette=pal, dither=Image.Dither.NONE) for f in frames]
 
 
+def write_registry() -> None:
+    """Gera src/constants/exerciseMedia.ts associando cada slug aos arquivos."""
+    lines = ["/* Arquivo gerado por scripts/gifs/generate.py — não edite manualmente. */", "",
+             "export type ExerciseMediaAsset = { gif: number; poster: number };", "",
+             "export const EXERCISE_MEDIA: Record<string, ExerciseMediaAsset> = {"]
+    for folder in sorted(p for p in OUT.iterdir() if p.is_dir()):
+        for gif in sorted(folder.glob("*.gif")):
+            slug, rel = gif.stem, f"../../assets/exercises/{folder.name}/{gif.stem}"
+            lines.append(f"  '{slug}': {{\n    gif: require('{rel}.gif'),\n"
+                         f"    poster: require('{rel}.png'),\n  }},")
+    lines.append("};\n")
+    (ROOT / "src" / "constants" / "exerciseMedia.ts").write_text("\n".join(lines))
+
+
 def main(argv: list[str]) -> None:
     sheet = "--sheet" in argv
     only = [a for a in argv if not a.startswith("--")]
@@ -52,6 +66,7 @@ def main(argv: list[str]) -> None:
         poster.save(folder / f"{ex.slug}.png", optimize=True)
         posters.append((ex.slug, frames[0], poster))
         print(f"{ex.slug:28s} {len(frames):3d} frames  {gif.stat().st_size / 1024:6.1f} KB")
+    write_registry()
     if sheet:
         w = 180
         img = Image.new("RGB", (w * 2 * 4, w * ((len(posters) + 3) // 4)), (0, 0, 0))

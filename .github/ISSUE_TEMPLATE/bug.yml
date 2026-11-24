@@ -1,0 +1,29 @@
+name: Bug
+description: Algo não funciona como deveria
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o problema e o que você esperava.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. Abra a tela ...
+        2. Toque em ...
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Aparelho e sistema
+      placeholder: 'ex.: Pixel 7, Android 15 / iPhone 14, iOS 19'
+  - type: textarea
+    id: logs
+    attributes:
+      label: Prints ou logs

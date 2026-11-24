@@ -1,0 +1,19 @@
+name: Funcionalidade
+description: Sugira uma melhoria ou nova funcionalidade
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema isso resolve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução proposta
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Critérios de aceite
+      placeholder: '- [ ] ...'
