@@ -1,4 +1,4 @@
-import { createClient, processLock } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { AppState, Platform } from 'react-native';
 
 import type { Database } from '@/types/database';
@@ -17,7 +17,6 @@ export const supabase = createClient<Database>(
       persistSession: true,
       detectSessionInUrl: false,
       flowType: 'pkce',
-      lock: processLock,
     },
   },
 );
