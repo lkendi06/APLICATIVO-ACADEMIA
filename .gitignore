@@ -44,3 +44,11 @@ yarn-error.*
 # Logs e cobertura
 *.log
 coverage/
+
+# Expo / TypeScript gerados
+.expo-shared/
+expo-env.d.ts
+
+# Folha de conferência dos GIFs (gerada localmente)
+scripts/gifs/contact-sheet.png
+__pycache__/

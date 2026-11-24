@@ -1,0 +1,44 @@
+# Configuração do Supabase CLI (desenvolvimento local com `supabase start`).
+# No projeto hospedado, configure os mesmos valores em Authentication → URL Configuration.
+project_id = "fittrack"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[storage]
+enabled = true
+file_size_limit = "10MiB"
+
+[auth]
+enabled = true
+site_url = "fittrack://"
+additional_redirect_urls = [
+  "fittrack://auth/callback",
+  "fittrack://reset-password",
+  "exp://127.0.0.1:8081/--/auth/callback",
+  "exp://127.0.0.1:8081/--/reset-password",
+]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+minimum_password_length = 8
+password_requirements = "lower_upper_letters_digits"
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = true
+max_frequency = "60s"
