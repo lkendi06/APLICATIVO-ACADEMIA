@@ -1,6 +1,10 @@
 import type { Difficulty, MuscleGroup } from '@/types/database';
 
-export const MUSCLE_GROUPS: { key: MuscleGroup; label: string; region: 'upper' | 'lower' | 'core' }[] = [
+export const MUSCLE_GROUPS: {
+  key: MuscleGroup;
+  label: string;
+  region: 'upper' | 'lower' | 'core';
+}[] = [
   { key: 'chest', label: 'Peito', region: 'upper' },
   { key: 'back', label: 'Costas', region: 'upper' },
   { key: 'shoulders', label: 'Ombros', region: 'upper' },

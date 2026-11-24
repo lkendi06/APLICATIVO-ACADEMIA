@@ -24,7 +24,11 @@ export function EmptyState({ icon, title, message, actionLabel, onAction, compac
       entering={FadeInDown.duration(320)}
       style={[
         styles.box,
-        { borderColor: colors.border, backgroundColor: colors.surface, paddingVertical: compact ? spacing.xl : spacing.huge },
+        {
+          borderColor: colors.border,
+          backgroundColor: colors.surface,
+          paddingVertical: compact ? spacing.xl : spacing.huge,
+        },
       ]}>
       <View style={[styles.iconWrap, { backgroundColor: colors.primarySoft }]}>
         <Icon name={icon} size={28} color="primaryText" />

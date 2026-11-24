@@ -41,7 +41,9 @@ export function ErrorView({ error, onRetry }: { error: unknown; onRetry?: () => 
       <Text variant="bodySm" color="textMuted" align="center">
         {friendlyError(error)}
       </Text>
-      {onRetry ? <Button title="Tentar novamente" variant="secondary" size="sm" onPress={onRetry} /> : null}
+      {onRetry ? (
+        <Button title="Tentar novamente" variant="secondary" size="sm" onPress={onRetry} />
+      ) : null}
     </View>
   );
 }

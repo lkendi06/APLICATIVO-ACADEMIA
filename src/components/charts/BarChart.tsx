@@ -8,9 +8,21 @@ import { formatNumber } from '@/utils/format';
 
 type Bar = { label: string; value: number; highlight?: boolean };
 
-type Props = { data: Bar[]; height?: number; accessibilityLabel: string; showValues?: boolean; decimals?: number };
+type Props = {
+  data: Bar[];
+  height?: number;
+  accessibilityLabel: string;
+  showValues?: boolean;
+  decimals?: number;
+};
 
-export function BarChart({ data, height = 150, accessibilityLabel, showValues = true, decimals = 0 }: Props) {
+export function BarChart({
+  data,
+  height = 150,
+  accessibilityLabel,
+  showValues = true,
+  decimals = 0,
+}: Props) {
   const { colors } = useTheme();
   const [width, setWidth] = useState(0);
   const max = Math.max(1, ...data.map((d) => d.value));
@@ -31,16 +43,29 @@ export function BarChart({ data, height = 150, accessibilityLabel, showValues = 
             const h = d.value > 0 ? Math.max(4, (d.value / max) * chartH) : 3;
             const x = i * slot + (slot - barW) / 2;
             const y = valueH + chartH - h;
-            const fill = d.value > 0 ? (d.highlight ? colors.primary : colors.accent) : colors.surfaceAlt;
+            const fill =
+              d.value > 0 ? (d.highlight ? colors.primary : colors.accent) : colors.surfaceAlt;
             return (
               <G key={i}>
                 <Rect x={x} y={y} width={barW} height={h} rx={Math.min(8, barW / 2)} fill={fill} />
                 {showValues && d.value > 0 ? (
-                  <SvgText x={x + barW / 2} y={y - 4} fontSize={10} fill={colors.textMuted} textAnchor="middle" fontFamily={fonts.semibold}>
+                  <SvgText
+                    x={x + barW / 2}
+                    y={y - 4}
+                    fontSize={10}
+                    fill={colors.textMuted}
+                    textAnchor="middle"
+                    fontFamily={fonts.semibold}>
                     {formatNumber(d.value, decimals)}
                   </SvgText>
                 ) : null}
-                <SvgText x={x + barW / 2} y={height - 4} fontSize={11} fill={d.highlight ? colors.text : colors.textSubtle} textAnchor="middle" fontFamily={fonts.medium}>
+                <SvgText
+                  x={x + barW / 2}
+                  y={height - 4}
+                  fontSize={11}
+                  fill={d.highlight ? colors.text : colors.textSubtle}
+                  textAnchor="middle"
+                  fontFamily={fonts.medium}>
                   {d.label}
                 </SvgText>
               </G>

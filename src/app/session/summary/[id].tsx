@@ -4,7 +4,19 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
 
 import { ExerciseMedia } from '@/components/exercise/ExerciseMedia';
-import { Badge, Button, Card, ErrorView, Icon, IconButton, LoadingView, Screen, SectionHeader, StatTile, Text } from '@/components/ui';
+import {
+  Badge,
+  Button,
+  Card,
+  ErrorView,
+  Icon,
+  IconButton,
+  LoadingView,
+  Screen,
+  SectionHeader,
+  StatTile,
+  Text,
+} from '@/components/ui';
 import { useFeedback } from '@/contexts/FeedbackContext';
 import { useDeleteSession, useSessionDetail, useSessionStats } from '@/hooks/queries';
 import { usePendingSync } from '@/hooks/useActiveWorkout';
@@ -32,7 +44,10 @@ export default function SessionSummary() {
     if (local && local.session.id === id) {
       return {
         ...local.session,
-        exercises: local.exercises.map((e) => ({ ...e, sets: local.sets.filter((s) => s.session_exercise_id === e.id) })),
+        exercises: local.exercises.map((e) => ({
+          ...e,
+          sets: local.sets.filter((s) => s.session_exercise_id === e.id),
+        })),
       };
     }
     return null;
@@ -47,7 +62,10 @@ export default function SessionSummary() {
 
   // Comparação: sessão anterior do mesmo plano (ou a anterior qualquer).
   const previous = (stats.data ?? []).find(
-    (s) => s.session_id !== id && new Date(s.started_at) < new Date(data.started_at) && (data.plan_id ? s.plan_id === data.plan_id : true),
+    (s) =>
+      s.session_id !== id &&
+      new Date(s.started_at) < new Date(data.started_at) &&
+      (data.plan_id ? s.plan_id === data.plan_id : true),
   );
   const volDiff = previous ? percentChange(totals.volumeKg, previous.total_volume_kg) : null;
   const repsDiff = previous ? totals.totalReps - previous.total_reps : null;
@@ -73,8 +91,26 @@ export default function SessionSummary() {
     <Screen
       back={!fresh}
       title={fresh ? undefined : 'Resumo do treino'}
-      right={!fresh ? <IconButton icon="trash-outline" tone="danger" label="Excluir treino" onPress={onDelete} /> : undefined}
-      footer={fresh ? <Button title="Concluir" size="lg" onPress={() => router.replace('/')} testID="summary-done" /> : undefined}>
+      right={
+        !fresh ? (
+          <IconButton
+            icon="trash-outline"
+            tone="danger"
+            label="Excluir treino"
+            onPress={onDelete}
+          />
+        ) : undefined
+      }
+      footer={
+        fresh ? (
+          <Button
+            title="Concluir"
+            size="lg"
+            onPress={() => router.replace('/')}
+            testID="summary-done"
+          />
+        ) : undefined
+      }>
       {fresh ? (
         <Animated.View entering={ZoomIn.springify().damping(14)} style={styles.hero}>
           <View style={[styles.trophy, { backgroundColor: colors.primary }]}>
@@ -100,21 +136,43 @@ export default function SessionSummary() {
       </Animated.View>
 
       <View style={styles.grid}>
-        <StatTile label="Duração" icon="time-outline" value={formatDuration(data.duration_seconds)} />
+        <StatTile
+          label="Duração"
+          icon="time-outline"
+          value={formatDuration(data.duration_seconds)}
+        />
         <StatTile label="Exercícios" icon="list-outline" value={String(exercisesDone.length)} />
-        <StatTile label="Séries concluídas" icon="layers-outline" value={String(totals.completedSets)} />
+        <StatTile
+          label="Séries concluídas"
+          icon="layers-outline"
+          value={String(totals.completedSets)}
+        />
         <StatTile
           label="Repetições"
           icon="repeat-outline"
           value={String(totals.totalReps)}
-          trend={repsDiff != null ? { value: `${repsDiff >= 0 ? '+' : ''}${repsDiff} vs anterior`, positive: repsDiff >= 0 } : null}
+          trend={
+            repsDiff != null
+              ? {
+                  value: `${repsDiff >= 0 ? '+' : ''}${repsDiff} vs anterior`,
+                  positive: repsDiff >= 0,
+                }
+              : null
+          }
         />
       </View>
       <StatTile
         label="Volume total (carga × repetições)"
         icon="barbell-outline"
         value={`${formatNumber(totals.volumeKg, 1)} kg`}
-        trend={volDiff != null ? { value: `${volDiff >= 0 ? '+' : ''}${formatNumber(volDiff, 1)}% vs ${previous?.name}`, positive: volDiff >= 0 } : null}
+        trend={
+          volDiff != null
+            ? {
+                value: `${volDiff >= 0 ? '+' : ''}${formatNumber(volDiff, 1)}% vs ${previous?.name}`,
+                positive: volDiff >= 0,
+              }
+            : null
+        }
         hint={previous ? undefined : 'Primeira sessão para comparar'}
       />
 
@@ -124,7 +182,13 @@ export default function SessionSummary() {
         return (
           <Card key={e.id} style={{ gap: spacing.sm }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-              <ExerciseMedia mediaKey={e.exercise.media_key} mediaUrl={e.exercise.media_url} name={e.exercise.name} animated={false} size={44} />
+              <ExerciseMedia
+                mediaKey={e.exercise.media_key}
+                mediaUrl={e.exercise.media_url}
+                name={e.exercise.name}
+                animated={false}
+                size={44}
+              />
               <View style={{ flex: 1 }}>
                 <Text variant="bodyMedium">{e.exercise.name}</Text>
                 <Text variant="caption" color="textMuted">
@@ -161,7 +225,21 @@ export default function SessionSummary() {
 
 const styles = StyleSheet.create({
   hero: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.xl },
-  trophy: { width: 84, height: 84, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.sm },
+  trophy: {
+    width: 84,
+    height: 84,
+    borderRadius: radii.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.sm,
+  },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
-  setLine: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.sm, borderTopWidth: StyleSheet.hairlineWidth, gap: spacing.sm },
+  setLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    gap: spacing.sm,
+  },
 });

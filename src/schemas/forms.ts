@@ -56,11 +56,7 @@ export const planSchema = z.object({
 export type PlanFormValues = z.infer<typeof planSchema>;
 
 export const profileSchema = z.object({
-  fullName: z
-    .string()
-    .trim()
-    .min(2, 'Informe seu nome.')
-    .max(120, 'Nome muito longo.'),
+  fullName: z.string().trim().min(2, 'Informe seu nome.').max(120, 'Nome muito longo.'),
   birthDate: z
     .string()
     .optional()

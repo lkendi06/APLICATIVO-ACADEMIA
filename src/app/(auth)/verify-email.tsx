@@ -40,7 +40,9 @@ export default function VerifyEmail() {
   return (
     <Screen back>
       <View style={styles.center}>
-        <Animated.View entering={ZoomIn.springify()} style={[styles.icon, { backgroundColor: colors.primarySoft }]}>
+        <Animated.View
+          entering={ZoomIn.springify()}
+          style={[styles.icon, { backgroundColor: colors.primarySoft }]}>
           <Icon name="mail-unread-outline" size={36} color="primaryText" />
         </Animated.View>
         <Text variant="h1" align="center">
@@ -48,8 +50,8 @@ export default function VerifyEmail() {
         </Text>
         <Text color="textMuted" align="center">
           Enviamos um link de confirmação para{'\n'}
-          <Text variant="bodyMedium">{email ?? 'seu e-mail'}</Text>.{'\n'}Abra o link neste celular para
-          ativar sua conta.
+          <Text variant="bodyMedium">{email ?? 'seu e-mail'}</Text>.{'\n'}Abra o link neste celular
+          para ativar sua conta.
         </Text>
         <Text variant="caption" color="textSubtle" align="center">
           Não encontrou? Verifique a pasta de spam ou lixo eletrônico.
@@ -69,5 +71,11 @@ export default function VerifyEmail() {
 
 const styles = StyleSheet.create({
   center: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xxxl },
-  icon: { width: 84, height: 84, borderRadius: radii.pill, alignItems: 'center', justifyContent: 'center' },
+  icon: {
+    width: 84,
+    height: 84,
+    borderRadius: radii.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

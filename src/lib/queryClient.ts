@@ -46,8 +46,10 @@ export const qk = {
   sessions: (key: string) => ['sessions', key] as const,
   sessionsAll: ['sessions'] as const,
   session: (id: string) => ['session', id] as const,
-  previousSets: (exerciseId: string, exclude?: string | null) => ['previous-sets', exerciseId, exclude ?? null] as const,
-  exerciseProgress: (exerciseId: string, key: string) => ['exercise-progress', exerciseId, key] as const,
+  previousSets: (exerciseId: string, exclude?: string | null) =>
+    ['previous-sets', exerciseId, exclude ?? null] as const,
+  exerciseProgress: (exerciseId: string, key: string) =>
+    ['exercise-progress', exerciseId, key] as const,
   trainedExercises: ['trained-exercises'] as const,
   metrics: (key: string) => ['metrics', key] as const,
   metricsAll: ['metrics'] as const,

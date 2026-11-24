@@ -20,7 +20,13 @@ export default function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
-    defaultValues: { fullName: '', email: '', password: '', confirmPassword: '', acceptTerms: false },
+    defaultValues: {
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      acceptTerms: false,
+    },
   });
   const password = watch('password');
 
@@ -29,7 +35,10 @@ export default function SignUp() {
     try {
       const { needsConfirmation } = await authService.signUp(values);
       if (needsConfirmation) {
-        router.replace({ pathname: '/verify-email', params: { email: values.email.trim().toLowerCase() } });
+        router.replace({
+          pathname: '/verify-email',
+          params: { email: values.email.trim().toLowerCase() },
+        });
       }
       // Sem confirmação obrigatória, a sessão já existe e o app abre automaticamente.
     } catch (e) {
@@ -136,11 +145,17 @@ export default function SignUp() {
               error={!!errors.acceptTerms}>
               <Text variant="bodySm">
                 Li e aceito os{' '}
-                <Text variant="bodySm" color="primaryText" onPress={() => router.push('/legal?doc=terms')}>
+                <Text
+                  variant="bodySm"
+                  color="primaryText"
+                  onPress={() => router.push('/legal?doc=terms')}>
                   Termos de Uso
                 </Text>{' '}
                 e a{' '}
-                <Text variant="bodySm" color="primaryText" onPress={() => router.push('/legal?doc=privacy')}>
+                <Text
+                  variant="bodySm"
+                  color="primaryText"
+                  onPress={() => router.push('/legal?doc=privacy')}>
                   Política de Privacidade
                 </Text>
                 .
@@ -157,13 +172,23 @@ export default function SignUp() {
 
       {formError ? (
         <Card tone="alt">
-          <Text variant="bodySm" color="danger" testID="sign-up-error" accessibilityLiveRegion="polite">
+          <Text
+            variant="bodySm"
+            color="danger"
+            testID="sign-up-error"
+            accessibilityLiveRegion="polite">
             {formError}
           </Text>
         </Card>
       ) : null}
 
-      <Button title="Criar conta" size="lg" loading={isSubmitting} onPress={onSubmit} testID="sign-up-submit" />
+      <Button
+        title="Criar conta"
+        size="lg"
+        loading={isSubmitting}
+        onPress={onSubmit}
+        testID="sign-up-submit"
+      />
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.xs }}>
         <Text variant="bodySm" color="textMuted">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSyncedState } from '@/hooks/useSyncedState';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
@@ -22,10 +22,20 @@ type Props = {
 };
 
 /** Campo numérico com botões − / + e digitação livre (aceita vírgula). */
-export function Stepper({ label, value, onChange, step = 1, min = 0, max = 9999, decimals = 0, suffix, compact, testID }: Props) {
+export function Stepper({
+  label,
+  value,
+  onChange,
+  step = 1,
+  min = 0,
+  max = 9999,
+  decimals = 0,
+  suffix,
+  compact,
+  testID,
+}: Props) {
   const { colors } = useTheme();
-  const [text, setText] = useState(formatNumber(value, decimals));
-  useEffect(() => setText(formatNumber(value, decimals)), [value, decimals]);
+  const [text, setText] = useSyncedState(formatNumber(value, decimals));
 
   const clamp = (n: number) => Math.min(max, Math.max(min, Math.round(n * 100) / 100));
   const commit = () => {

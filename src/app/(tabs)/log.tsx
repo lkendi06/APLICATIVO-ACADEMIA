@@ -4,7 +4,17 @@ import { View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { SyncBanner } from '@/components/SyncBanner';
-import { Button, Card, EmptyState, Icon, ListSkeleton, Screen, SectionHeader, Text, TextField } from '@/components/ui';
+import {
+  Button,
+  Card,
+  EmptyState,
+  Icon,
+  ListSkeleton,
+  Screen,
+  SectionHeader,
+  Text,
+  TextField,
+} from '@/components/ui';
 import { useUserId } from '@/contexts/AuthContext';
 import { useFeedback } from '@/contexts/FeedbackContext';
 import { MUSCLE_LABEL } from '@/constants/muscles';
@@ -36,9 +46,14 @@ export default function LogTab() {
     try {
       let lastWeights: Record<string, number> = {};
       if (plan) {
-        lastWeights = await exerciseApi.lastWeights(plan.items.map((i) => i.exercise_id)).catch(() => ({}));
+        lastWeights = await exerciseApi
+          .lastWeights(plan.items.map((i) => i.exercise_id))
+          .catch(() => ({}));
       }
-      const name = plan?.name ?? (freeName.trim() || `Treino livre · ${formatDate(new Date(), { day: '2-digit', month: '2-digit' })}`);
+      const name =
+        plan?.name ??
+        (freeName.trim() ||
+          `Treino livre · ${formatDate(new Date(), { day: '2-digit', month: '2-digit' })}`);
       const session = await activeWorkout.start({ userId, name, plan, lastWeights });
       router.push(`/session/${session.id}`);
     } catch (e) {
@@ -55,6 +70,8 @@ export default function LogTab() {
     if (!plan) return;
     autoStarted.current = planId;
     router.setParams({ planId: undefined });
+    // Ação disparada por parâmetro de navegação (efeito colateral intencional).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     start(plan);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId, plans.data]);
@@ -73,38 +90,74 @@ export default function LogTab() {
           </View>
           <Text variant="h2">{active.session.name}</Text>
           <Text color="textMuted">
-            {formatClock(elapsedSeconds(active.session))} · {done}/{active.sets.length} séries concluídas
+            {formatClock(elapsedSeconds(active.session))} · {done}/{active.sets.length} séries
+            concluídas
           </Text>
-          <Button title="Voltar ao treino" icon="play" size="lg" onPress={() => router.push(`/session/${active.session.id}`)} testID="log-resume" />
+          <Button
+            title="Voltar ao treino"
+            icon="play"
+            size="lg"
+            onPress={() => router.push(`/session/${active.session.id}`)}
+            testID="log-resume"
+          />
         </Card>
       </Screen>
     );
   }
 
   return (
-    <Screen title="Registrar treino" subtitle="Escolha um treino ou comece do zero" largeTitle tabBarSpace>
+    <Screen
+      title="Registrar treino"
+      subtitle="Escolha um treino ou comece do zero"
+      largeTitle
+      tabBarSpace>
       <SyncBanner />
       <Card style={{ gap: spacing.md }}>
         <Text variant="h3">Treino livre</Text>
         <Text variant="bodySm" color="textMuted">
           Adicione os exercícios durante o treino.
         </Text>
-        <TextField label="Nome (opcional)" placeholder="Ex.: Treino de sexta" value={freeName} onChangeText={setFreeName} maxLength={80} />
-        <Button title="Começar treino livre" icon="flash" loading={starting === 'free'} disabled={!!starting} onPress={() => start(null)} testID="log-free" />
+        <TextField
+          label="Nome (opcional)"
+          placeholder="Ex.: Treino de sexta"
+          value={freeName}
+          onChangeText={setFreeName}
+          maxLength={80}
+        />
+        <Button
+          title="Começar treino livre"
+          icon="flash"
+          loading={starting === 'free'}
+          disabled={!!starting}
+          onPress={() => start(null)}
+          testID="log-free"
+        />
       </Card>
 
-      <SectionHeader title="Meus treinos" action="Novo" onAction={() => router.push('/workouts/new')} />
+      <SectionHeader
+        title="Meus treinos"
+        action="Novo"
+        onAction={() => router.push('/workouts/new')}
+      />
       {plans.isLoading ? (
         <ListSkeleton rows={3} />
       ) : (plans.data ?? []).length === 0 ? (
-        <EmptyState compact icon="barbell-outline" title="Sem treinos salvos" message="Crie um treino para iniciar com séries e cargas já configuradas." actionLabel="Criar treino" onAction={() => router.push('/workouts/new')} />
+        <EmptyState
+          compact
+          icon="barbell-outline"
+          title="Sem treinos salvos"
+          message="Crie um treino para iniciar com séries e cargas já configuradas."
+          actionLabel="Criar treino"
+          onAction={() => router.push('/workouts/new')}
+        />
       ) : (
         plans.data!.map((p, i) => (
           <Animated.View key={p.id} entering={FadeInDown.delay(i * 40)}>
             <Card style={{ gap: spacing.sm }}>
               <Text variant="h3">{p.name}</Text>
               <Text variant="caption" color="textMuted">
-                {p.items.length} exercícios · {p.muscle_groups.map((m) => MUSCLE_LABEL[m]).join(', ') || '—'}
+                {p.items.length} exercícios ·{' '}
+                {p.muscle_groups.map((m) => MUSCLE_LABEL[m]).join(', ') || '—'}
               </Text>
               <Button
                 title="Iniciar"

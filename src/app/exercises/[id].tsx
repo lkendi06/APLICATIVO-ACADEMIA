@@ -4,7 +4,17 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { LineChart } from '@/components/charts/LineChart';
 import { ExerciseMedia } from '@/components/exercise/ExerciseMedia';
-import { Badge, Card, Chip, ErrorView, IconButton, LoadingView, Screen, SectionHeader, Text } from '@/components/ui';
+import {
+  Badge,
+  Card,
+  Chip,
+  ErrorView,
+  IconButton,
+  LoadingView,
+  Screen,
+  SectionHeader,
+  Text,
+} from '@/components/ui';
 import { DIFFICULTY_LABEL, MUSCLE_LABEL } from '@/constants/muscles';
 import { useExercise, useExerciseProgress, useFavorites, useToggleFavorite } from '@/hooks/queries';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -21,7 +31,8 @@ export default function ExerciseDetail() {
   const isFav = (favorites.data ?? []).includes(id);
 
   if (exercise.isLoading) return <LoadingView />;
-  if (exercise.error || !exercise.data) return <ErrorView error={exercise.error} onRetry={exercise.refetch} />;
+  if (exercise.error || !exercise.data)
+    return <ErrorView error={exercise.error} onRetry={exercise.refetch} />;
   const e = exercise.data;
   const history = progress.data ?? [];
   const best = history.reduce((a, p) => Math.max(a, p.max_weight_kg), 0);
@@ -38,7 +49,14 @@ export default function ExerciseDetail() {
           testID="exercise-favorite"
         />
       }>
-      <Animated.View entering={FadeIn.duration(300)} style={{ borderRadius: radii.xl, overflow: 'hidden', borderWidth: 1, borderColor: colors.border }}>
+      <Animated.View
+        entering={FadeIn.duration(300)}
+        style={{
+          borderRadius: radii.xl,
+          overflow: 'hidden',
+          borderWidth: 1,
+          borderColor: colors.border,
+        }}>
         <ExerciseMedia mediaKey={e.media_key} mediaUrl={e.media_url} name={e.name} rounded={0} />
       </Animated.View>
       <Text variant="caption" color="textSubtle" align="center">
@@ -85,7 +103,15 @@ export default function ExerciseDetail() {
       <Card style={{ gap: spacing.md }}>
         {e.instructions.map((step, i) => (
           <View key={i} style={{ flexDirection: 'row', gap: spacing.md }}>
-            <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: colors.primarySoft, alignItems: 'center', justifyContent: 'center' }}>
+            <View
+              style={{
+                width: 26,
+                height: 26,
+                borderRadius: 13,
+                backgroundColor: colors.primarySoft,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <Text variant="caption" color="primaryText">
                 {i + 1}
               </Text>
@@ -108,12 +134,18 @@ export default function ExerciseDetail() {
         </>
       ) : null}
 
-      <SectionHeader title="Seu histórico" action={history.length ? 'Ver evolução' : undefined} onAction={() => router.push({ pathname: '/history', params: { tab: 'exercises', exerciseId: id } })} />
+      <SectionHeader
+        title="Seu histórico"
+        action={history.length ? 'Ver evolução' : undefined}
+        onAction={() =>
+          router.push({ pathname: '/history', params: { tab: 'exercises', exerciseId: id } })
+        }
+      />
       {history.length ? (
         <Card style={{ gap: spacing.sm }}>
           <Text variant="bodySm" color="textMuted">
-            Melhor carga: <Text variant="label">{formatNumber(best, 1)} kg</Text> · {history.length} sessão(ões) · última em{' '}
-            {formatDate(history[history.length - 1].started_at)}
+            Melhor carga: <Text variant="label">{formatNumber(best, 1)} kg</Text> · {history.length}{' '}
+            sessão(ões) · última em {formatDate(history[history.length - 1].started_at)}
           </Text>
           <LineChart
             data={history.map((p) => ({ x: new Date(p.started_at), y: p.max_weight_kg }))}
@@ -125,12 +157,14 @@ export default function ExerciseDetail() {
       ) : (
         <Card tone="alt">
           <Text variant="bodySm" color="textMuted">
-            Você ainda não registrou este exercício. Ao concluir séries, sua evolução de carga aparece aqui.
+            Você ainda não registrou este exercício. Ao concluir séries, sua evolução de carga
+            aparece aqui.
           </Text>
         </Card>
       )}
       <Text variant="caption" color="textSubtle">
-        Execute os movimentos dentro dos seus limites. Em caso de dor ou dúvida, procure um profissional de educação física.
+        Execute os movimentos dentro dos seus limites. Em caso de dor ou dúvida, procure um
+        profissional de educação física.
       </Text>
     </Screen>
   );

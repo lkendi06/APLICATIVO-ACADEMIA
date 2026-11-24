@@ -44,7 +44,8 @@ export function RestTimer() {
 
   useEffect(() => {
     if (rest && remaining === 0) {
-      if (Platform.OS !== 'web') Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => undefined);
+      if (Platform.OS !== 'web')
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => undefined);
       activeWorkout.stopRest();
     }
   }, [rest, remaining]);
@@ -56,11 +57,22 @@ export function RestTimer() {
     <Animated.View
       entering={SlideInDown.springify().damping(18)}
       exiting={SlideOutDown.duration(200)}
-      style={[styles.box, shadows.card, { backgroundColor: colors.surfaceRaised, borderColor: colors.border }]}
+      style={[
+        styles.box,
+        shadows.card,
+        { backgroundColor: colors.surfaceRaised, borderColor: colors.border },
+      ]}
       accessibilityLiveRegion="polite"
       accessibilityLabel={`Descanso: ${remaining} segundos restantes`}>
       <View style={[styles.progress, { backgroundColor: colors.surfaceAlt }]}>
-        <View style={{ width: `${Math.min(100, progress * 100)}%`, height: '100%', backgroundColor: colors.primary, borderRadius: 3 }} />
+        <View
+          style={{
+            width: `${Math.min(100, progress * 100)}%`,
+            height: '100%',
+            backgroundColor: colors.primary,
+            borderRadius: 3,
+          }}
+        />
       </View>
       <View style={styles.row}>
         <View style={{ flex: 1 }}>
@@ -71,16 +83,34 @@ export function RestTimer() {
             {formatClock(remaining)}
           </Text>
         </View>
-        <IconButton icon="remove" label="Diminuir 15 segundos" onPress={() => activeWorkout.adjustRest(-15)} />
-        <IconButton icon="add" label="Aumentar 15 segundos" onPress={() => activeWorkout.adjustRest(15)} />
-        <Button title="Pular" size="sm" variant="secondary" onPress={() => activeWorkout.stopRest()} />
+        <IconButton
+          icon="remove"
+          label="Diminuir 15 segundos"
+          onPress={() => activeWorkout.adjustRest(-15)}
+        />
+        <IconButton
+          icon="add"
+          label="Aumentar 15 segundos"
+          onPress={() => activeWorkout.adjustRest(15)}
+        />
+        <Button
+          title="Pular"
+          size="sm"
+          variant="secondary"
+          onPress={() => activeWorkout.stopRest()}
+        />
       </View>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  box: { borderRadius: radii.xl, padding: spacing.lg, gap: spacing.md, borderWidth: StyleSheet.hairlineWidth },
+  box: {
+    borderRadius: radii.xl,
+    padding: spacing.lg,
+    gap: spacing.md,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
   progress: { height: 6, borderRadius: 3, overflow: 'hidden' },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
 });

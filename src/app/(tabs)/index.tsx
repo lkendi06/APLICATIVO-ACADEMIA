@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -84,13 +84,19 @@ export default function Dashboard() {
       const d = new Date(s.started_at);
       return d >= start && d < end;
     }).length;
-    return { label: i === 7 ? 'Atual' : `${start.getDate()}/${start.getMonth() + 1}`, value: count, highlight: i === 7 };
+    return {
+      label: i === 7 ? 'Atual' : `${start.getDate()}/${start.getMonth() + 1}`,
+      value: count,
+      highlight: i === 7,
+    };
   });
 
   const weights = (metrics.data ?? []).filter((m) => m.weight_kg != null);
   const latestWeight = weights[0];
-  const monthAgo = Date.now() - 30 * 86_400_000;
-  const weightBaseline = weights.find((m) => new Date(m.measured_at).getTime() <= monthAgo) ?? weights[weights.length - 1];
+  const [monthAgo] = useState(() => Date.now() - 30 * 86_400_000);
+  const weightBaseline =
+    weights.find((m) => new Date(m.measured_at).getTime() <= monthAgo) ??
+    weights[weights.length - 1];
   const weightDelta =
     latestWeight && weightBaseline && latestWeight.id !== weightBaseline.id
       ? latestWeight.weight_kg! - weightBaseline.weight_kg!
@@ -115,7 +121,10 @@ export default function Dashboard() {
             {greeting()}, {firstName(profile.data?.full_name)}
           </Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Abrir perfil" onPress={() => router.push('/profile')}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Abrir perfil"
+          onPress={() => router.push('/profile')}>
           <AvatarImage path={profile.data?.avatar_path} name={profile.data?.full_name} size={46} />
         </Pressable>
       </Animated.View>
@@ -139,7 +148,10 @@ export default function Dashboard() {
         <Animated.View entering={FadeInDown.delay(60).duration(350)}>
           <Card tone={active ? 'primary' : 'default'} style={{ gap: spacing.md }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-              <Badge label={active ? 'Em andamento' : 'Treino do dia'} tone={active ? 'danger' : 'primary'} />
+              <Badge
+                label={active ? 'Em andamento' : 'Treino do dia'}
+                tone={active ? 'danger' : 'primary'}
+              />
               <View style={{ flex: 1 }} />
               {!active && suggested ? (
                 <Text variant="caption" color="textMuted">
@@ -155,7 +167,8 @@ export default function Dashboard() {
             ) : null}
             {active ? (
               <Text variant="bodySm" color="textMuted">
-                {active.sets.filter((s) => s.completed).length} de {active.sets.length} séries concluídas
+                {active.sets.filter((s) => s.completed).length} de {active.sets.length} séries
+                concluídas
               </Text>
             ) : null}
             <Button
@@ -222,7 +235,10 @@ export default function Dashboard() {
                 weightDelta != null
                   ? {
                       value: `${weightDelta > 0 ? '+' : ''}${formatNumber(weightDelta, 1)} kg em 30 dias`,
-                      positive: profile.data?.fitness_goal === 'gain_muscle' ? weightDelta >= 0 : weightDelta <= 0,
+                      positive:
+                        profile.data?.fitness_goal === 'gain_muscle'
+                          ? weightDelta >= 0
+                          : weightDelta <= 0,
                     }
                   : null
               }
@@ -234,7 +250,10 @@ export default function Dashboard() {
               value={`${formatNumber(volumeThis, 0)} kg`}
               trend={
                 volumeTrend != null
-                  ? { value: `${volumeTrend > 0 ? '+' : ''}${formatNumber(volumeTrend, 1)}% vs semana passada`, positive: volumeTrend >= 0 }
+                  ? {
+                      value: `${volumeTrend > 0 ? '+' : ''}${formatNumber(volumeTrend, 1)}% vs semana passada`,
+                      positive: volumeTrend >= 0,
+                    }
                   : null
               }
               hint="Carga × repetições"
@@ -244,8 +263,14 @@ export default function Dashboard() {
           {/* Último treino */}
           {lastSession ? (
             <>
-              <SectionHeader title="Último treino" action="Histórico" onAction={() => router.push('/history')} />
-              <Card onPress={() => router.push(`/session/summary/${lastSession.session_id}`)} accessibilityLabel={`Último treino: ${lastSession.name}`}>
+              <SectionHeader
+                title="Último treino"
+                action="Histórico"
+                onAction={() => router.push('/history')}
+              />
+              <Card
+                onPress={() => router.push(`/session/summary/${lastSession.session_id}`)}
+                accessibilityLabel={`Último treino: ${lastSession.name}`}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
                   <View style={[styles.iconBox, { backgroundColor: colors.accentSoft }]}>
                     <Icon name="checkmark-done" size={22} color="accent" />
@@ -253,8 +278,9 @@ export default function Dashboard() {
                   <View style={{ flex: 1 }}>
                     <Text variant="bodyMedium">{lastSession.name}</Text>
                     <Text variant="caption" color="textMuted">
-                      {formatDate(lastSession.started_at)} · {formatDuration(lastSession.duration_seconds)} ·{' '}
-                      {lastSession.completed_sets} séries · {formatNumber(lastSession.total_volume_kg, 0)} kg
+                      {formatDate(lastSession.started_at)} ·{' '}
+                      {formatDuration(lastSession.duration_seconds)} · {lastSession.completed_sets}{' '}
+                      séries · {formatNumber(lastSession.total_volume_kg, 0)} kg
                     </Text>
                   </View>
                   <Icon name="chevron-forward" size={18} color="textSubtle" />
@@ -266,16 +292,35 @@ export default function Dashboard() {
           {/* Progresso */}
           <SectionHeader title="Treinos por semana" />
           <Card>
-            <BarChart data={weeklyBars} accessibilityLabel="Treinos por semana nas últimas 8 semanas" />
+            <BarChart
+              data={weeklyBars}
+              accessibilityLabel="Treinos por semana nas últimas 8 semanas"
+            />
           </Card>
 
           {/* Atalhos */}
           <SectionHeader title="Atalhos" />
           <View style={styles.grid}>
-            <Shortcut icon="add-circle-outline" label="Treino livre" onPress={() => router.push('/log')} />
-            <Shortcut icon="scale-outline" label="Registrar peso" onPress={() => router.push('/metrics/new')} />
-            <Shortcut icon="library-outline" label="Exercícios" onPress={() => router.push('/exercises')} />
-            <Shortcut icon="trophy-outline" label="Objetivos" onPress={() => router.push('/goals')} />
+            <Shortcut
+              icon="add-circle-outline"
+              label="Treino livre"
+              onPress={() => router.push('/log')}
+            />
+            <Shortcut
+              icon="scale-outline"
+              label="Registrar peso"
+              onPress={() => router.push('/metrics/new')}
+            />
+            <Shortcut
+              icon="library-outline"
+              label="Exercícios"
+              onPress={() => router.push('/exercises')}
+            />
+            <Shortcut
+              icon="trophy-outline"
+              label="Objetivos"
+              onPress={() => router.push('/goals')}
+            />
           </View>
         </>
       ) : null}
@@ -283,7 +328,15 @@ export default function Dashboard() {
   );
 }
 
-function Shortcut({ icon, label, onPress }: { icon: React.ComponentProps<typeof Icon>['name']; label: string; onPress: () => void }) {
+function Shortcut({
+  icon,
+  label,
+  onPress,
+}: {
+  icon: React.ComponentProps<typeof Icon>['name'];
+  label: string;
+  onPress: () => void;
+}) {
   const { colors } = useTheme();
   return (
     <Pressable
@@ -305,7 +358,13 @@ const styles = StyleSheet.create({
   weekRow: { flexDirection: 'row', justifyContent: 'space-between' },
   dot: { width: 14, height: 14, borderRadius: 7 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
-  iconBox: { width: 44, height: 44, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center' },
+  iconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   shortcut: {
     flexBasis: '47%',
     flexGrow: 1,

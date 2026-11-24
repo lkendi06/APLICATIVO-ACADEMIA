@@ -51,8 +51,16 @@ export function SessionExerciseCard({ item, sets, sessionId, index }: Props) {
     <Animated.View layout={LinearTransition} entering={FadeIn}>
       <Card style={{ gap: spacing.md }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-          <Pressable accessibilityRole="button" accessibilityLabel={`Ver demonstração de ${item.exercise.name}`} onPress={() => router.push(`/exercises/${item.exercise_id}`)}>
-            <ExerciseMedia mediaKey={item.exercise.media_key} mediaUrl={item.exercise.media_url} name={item.exercise.name} size={56} />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Ver demonstração de ${item.exercise.name}`}
+            onPress={() => router.push(`/exercises/${item.exercise_id}`)}>
+            <ExerciseMedia
+              mediaKey={item.exercise.media_key}
+              mediaUrl={item.exercise.media_url}
+              name={item.exercise.name}
+              size={56}
+            />
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text variant="bodyMedium" numberOfLines={2}>
@@ -62,12 +70,19 @@ export function SessionExerciseCard({ item, sets, sessionId, index }: Props) {
               {MUSCLE_LABEL[item.exercise.primary_muscle]} · descanso {item.rest_seconds}s
             </Text>
           </View>
-          <IconButton icon="trash-outline" size={34} tone="danger" label={`Remover ${item.exercise.name}`} onPress={removeExercise} />
+          <IconButton
+            icon="trash-outline"
+            size={34}
+            tone="danger"
+            label={`Remover ${item.exercise.name}`}
+            onPress={removeExercise}
+          />
         </View>
 
         {prev.length ? (
           <Text variant="caption" color="textSubtle">
-            Última vez ({formatDate(prev[0].started_at, { day: '2-digit', month: 'short' })}): {prev.map((p) => `${formatNumber(p.weight_kg, 1)}×${p.reps}`).join(', ')}
+            Última vez ({formatDate(prev[0].started_at, { day: '2-digit', month: 'short' })}):{' '}
+            {prev.map((p) => `${formatNumber(p.weight_kg, 1)}×${p.reps}`).join(', ')}
           </Text>
         ) : null}
 
@@ -80,12 +95,22 @@ export function SessionExerciseCard({ item, sets, sessionId, index }: Props) {
             previous={prev.find((p) => p.set_number === s.set_number)}
             onChange={(patch) => activeWorkout.updateSet(s.id, patch)}
             onDelete={() => deleteSet(s)}
-            onCompleted={() => item.rest_seconds > 0 && activeWorkout.startRest(item.rest_seconds, item.exercise.name)}
+            onCompleted={() =>
+              item.rest_seconds > 0 &&
+              activeWorkout.startRest(item.rest_seconds, item.exercise.name)
+            }
           />
         ))}
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Button title="Adicionar série" icon="add" size="sm" variant="ghost" onPress={() => activeWorkout.addSet(item.id)} />
+        <View
+          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Button
+            title="Adicionar série"
+            icon="add"
+            size="sm"
+            variant="ghost"
+            onPress={() => activeWorkout.addSet(item.id)}
+          />
           {totals.completedSets > 0 ? (
             <Text variant="caption" color="textMuted">
               {formatNumber(totals.volumeKg, 0)} kg

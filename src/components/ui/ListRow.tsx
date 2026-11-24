@@ -18,13 +18,27 @@ type Props = {
   testID?: string;
 };
 
-export function ListRow({ icon, title, subtitle, value, onPress, destructive, switchValue, onSwitch, testID }: Props) {
+export function ListRow({
+  icon,
+  title,
+  subtitle,
+  value,
+  onPress,
+  destructive,
+  switchValue,
+  onSwitch,
+  testID,
+}: Props) {
   const { colors } = useTheme();
   const isSwitch = onSwitch !== undefined;
   const content = (
     <>
       {icon ? (
-        <View style={[styles.icon, { backgroundColor: destructive ? colors.dangerSoft : colors.surfaceAlt }]}>
+        <View
+          style={[
+            styles.icon,
+            { backgroundColor: destructive ? colors.dangerSoft : colors.surfaceAlt },
+          ]}>
           <Icon name={icon} size={18} color={destructive ? 'danger' : 'text'} />
         </View>
       ) : null}
@@ -73,5 +87,11 @@ export function ListRow({ icon, title, subtitle, value, onPress, destructive, sw
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.md },
-  icon: { width: 36, height: 36, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center' },
+  icon: {
+    width: 36,
+    height: 36,
+    borderRadius: radii.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

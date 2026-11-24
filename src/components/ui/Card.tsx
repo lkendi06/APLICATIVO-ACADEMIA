@@ -11,7 +11,15 @@ type Props = ViewProps & {
   accessibilityLabel?: string;
 };
 
-export function Card({ onPress, padded = true, tone = 'default', style, children, accessibilityLabel, ...rest }: Props) {
+export function Card({
+  onPress,
+  padded = true,
+  tone = 'default',
+  style,
+  children,
+  accessibilityLabel,
+  ...rest
+}: Props) {
   const { colors } = useTheme();
   const bg =
     tone === 'alt'
@@ -32,7 +40,10 @@ export function Card({ onPress, padded = true, tone = 'default', style, children
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
         onPress={onPress}
-        style={({ pressed }) => [...base, { opacity: pressed ? 0.85 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] }]}
+        style={({ pressed }) => [
+          ...base,
+          { opacity: pressed ? 0.85 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] },
+        ]}
         {...rest}>
         {children}
       </Pressable>

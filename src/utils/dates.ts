@@ -53,7 +53,9 @@ export function startOfDay(d = new Date()): Date {
 
 export function isSameDay(a: Date, b: Date) {
   return (
-    a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
   );
 }
 

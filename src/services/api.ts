@@ -41,9 +41,14 @@ export const profileApi = {
     return unwrap(await supabase.from('profiles').update(patch).eq('id', userId).select().single());
   },
   async getPreferences(userId: string): Promise<UserPreferences> {
-    return unwrap(await supabase.from('user_preferences').select('*').eq('user_id', userId).single());
+    return unwrap(
+      await supabase.from('user_preferences').select('*').eq('user_id', userId).single(),
+    );
   },
-  async updatePreferences(userId: string, patch: Partial<UserPreferences>): Promise<UserPreferences> {
+  async updatePreferences(
+    userId: string,
+    patch: Partial<UserPreferences>,
+  ): Promise<UserPreferences> {
     return unwrap(
       await supabase.from('user_preferences').update(patch).eq('user_id', userId).select().single(),
     );
@@ -69,7 +74,10 @@ export const exerciseApi = {
       unwrap(
         await supabase
           .from('exercise_favorites')
-          .upsert({ exercise_id: exerciseId }, { onConflict: 'user_id,exercise_id', ignoreDuplicates: true }),
+          .upsert(
+            { exercise_id: exerciseId },
+            { onConflict: 'user_id,exercise_id', ignoreDuplicates: true },
+          ),
       );
     } else {
       unwrap(await supabase.from('exercise_favorites').delete().eq('exercise_id', exerciseId));
@@ -94,7 +102,8 @@ export const exerciseApi = {
         .order('started_at', { ascending: false }),
     );
     const out: Record<string, number> = {};
-    for (const r of rows) if (out[r.exercise_id] === undefined) out[r.exercise_id] = Number(r.max_weight_kg);
+    for (const r of rows)
+      if (out[r.exercise_id] === undefined) out[r.exercise_id] = Number(r.max_weight_kg);
     return out;
   },
 };
@@ -205,7 +214,9 @@ export const planApi = {
     const withId = rows.filter((r) => 'id' in r);
     const withoutId = rows.filter((r) => !('id' in r));
     if (withId.length) {
-      unwrap(await supabase.from('workout_plan_exercises').upsert(withId as never, { onConflict: 'id' }));
+      unwrap(
+        await supabase.from('workout_plan_exercises').upsert(withId as never, { onConflict: 'id' }),
+      );
     }
     if (withoutId.length) {
       unwrap(await supabase.from('workout_plan_exercises').insert(withoutId as never));
@@ -301,7 +312,16 @@ export const sessionApi = {
 export type MetricInput = Partial<
   Pick<
     BodyMetric,
-    'weight_kg' | 'height_cm' | 'waist_cm' | 'arm_cm' | 'chest_cm' | 'hip_cm' | 'thigh_cm' | 'body_fat_pct' | 'notes' | 'measured_at'
+    | 'weight_kg'
+    | 'height_cm'
+    | 'waist_cm'
+    | 'arm_cm'
+    | 'chest_cm'
+    | 'hip_cm'
+    | 'thigh_cm'
+    | 'body_fat_pct'
+    | 'notes'
+    | 'measured_at'
   >
 >;
 
@@ -313,7 +333,9 @@ export const metricsApi = {
     return unwrap(await q).map(normalizeMetric);
   },
   async create(input: MetricInput): Promise<BodyMetric> {
-    return normalizeMetric(unwrap(await supabase.from('body_metrics').insert(input).select().single()));
+    return normalizeMetric(
+      unwrap(await supabase.from('body_metrics').insert(input).select().single()),
+    );
   },
   async update(id: string, input: MetricInput): Promise<BodyMetric> {
     return normalizeMetric(
@@ -345,7 +367,9 @@ function normalizeMetric(m: BodyMetric): BodyMetric {
 // ---------------------------------------------------------------------------
 export const goalsApi = {
   async list(): Promise<UserGoal[]> {
-    return unwrap(await supabase.from('user_goals').select('*').order('created_at', { ascending: false }));
+    return unwrap(
+      await supabase.from('user_goals').select('*').order('created_at', { ascending: false }),
+    );
   },
   async create(input: Pick<UserGoal, 'type' | 'title'> & Partial<UserGoal>) {
     return unwrap(await supabase.from('user_goals').insert(input).select().single());

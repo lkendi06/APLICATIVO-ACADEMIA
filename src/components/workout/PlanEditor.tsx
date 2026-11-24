@@ -62,7 +62,11 @@ export function PlanEditor({ plan }: Props) {
         })) ?? [],
     },
   });
-  const { fields, append, remove, move, update } = useFieldArray({ control, name: 'items', keyName: 'key' });
+  const { fields, append, remove, move, update } = useFieldArray({
+    control,
+    name: 'items',
+    keyName: 'key',
+  });
   const items = watch('items');
   const muscles = Array.from(new Set(items.map((i) => i.primary_muscle))) as MuscleGroup[];
 
@@ -128,7 +132,15 @@ export function PlanEditor({ plan }: Props) {
     <Screen
       title={plan ? 'Editar treino' : 'Novo treino'}
       right={<IconButton icon="close" label="Fechar" onPress={onBack} />}
-      footer={<Button title={plan ? 'Salvar alterações' : 'Salvar treino'} size="lg" loading={save.isPending} onPress={onSubmit} testID="plan-save" />}>
+      footer={
+        <Button
+          title={plan ? 'Salvar alterações' : 'Salvar treino'}
+          size="lg"
+          loading={save.isPending}
+          onPress={onSubmit}
+          testID="plan-save"
+        />
+      }>
       <Controller
         control={control}
         name="name"
@@ -178,7 +190,10 @@ export function PlanEditor({ plan }: Props) {
                   onPress={() => field.onChange(c)}
                   style={[
                     styles.color,
-                    { backgroundColor: c, borderColor: field.value === c ? colors.text : 'transparent' },
+                    {
+                      backgroundColor: c,
+                      borderColor: field.value === c ? colors.text : 'transparent',
+                    },
                   ]}
                 />
               ))}
@@ -207,7 +222,12 @@ export function PlanEditor({ plan }: Props) {
         </Text>
       ) : null}
       {fields.length === 0 ? (
-        <EmptyState compact icon="add-circle-outline" title="Adicione exercícios" message="Escolha na biblioteca os exercícios deste treino." />
+        <EmptyState
+          compact
+          icon="add-circle-outline"
+          title="Adicione exercícios"
+          message="Escolha na biblioteca os exercícios deste treino."
+        />
       ) : null}
 
       {fields.map((f, index) => {
@@ -218,7 +238,13 @@ export function PlanEditor({ plan }: Props) {
           <Animated.View key={f.key} layout={LinearTransition} entering={FadeIn}>
             <Card style={{ gap: spacing.md }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-                <ExerciseMedia mediaKey={ex?.media_key} mediaUrl={ex?.media_url} name={item.name} animated={false} size={48} />
+                <ExerciseMedia
+                  mediaKey={ex?.media_key}
+                  mediaUrl={ex?.media_url}
+                  name={item.name}
+                  animated={false}
+                  size={48}
+                />
                 <View style={{ flex: 1 }}>
                   <Text variant="bodyMedium" numberOfLines={1}>
                     {index + 1}. {item.name}
@@ -227,13 +253,45 @@ export function PlanEditor({ plan }: Props) {
                     {MUSCLE_LABEL[item.primary_muscle as MuscleGroup]}
                   </Text>
                 </View>
-                <IconButton icon="chevron-up" size={32} label="Mover para cima" disabled={index === 0} onPress={() => move(index, index - 1)} />
-                <IconButton icon="chevron-down" size={32} label="Mover para baixo" disabled={index === fields.length - 1} onPress={() => move(index, index + 1)} />
-                <IconButton icon="trash-outline" size={32} tone="danger" label={`Remover ${item.name}`} onPress={() => remove(index)} />
+                <IconButton
+                  icon="chevron-up"
+                  size={32}
+                  label="Mover para cima"
+                  disabled={index === 0}
+                  onPress={() => move(index, index - 1)}
+                />
+                <IconButton
+                  icon="chevron-down"
+                  size={32}
+                  label="Mover para baixo"
+                  disabled={index === fields.length - 1}
+                  onPress={() => move(index, index + 1)}
+                />
+                <IconButton
+                  icon="trash-outline"
+                  size={32}
+                  tone="danger"
+                  label={`Remover ${item.name}`}
+                  onPress={() => remove(index)}
+                />
               </View>
               <View style={styles.grid}>
-                <Stepper compact label="Séries" value={item.target_sets} min={1} max={20} onChange={(v) => update(index, { ...item, target_sets: v })} />
-                <Stepper compact label="Repetições" value={item.target_reps} min={1} max={100} onChange={(v) => update(index, { ...item, target_reps: v })} />
+                <Stepper
+                  compact
+                  label="Séries"
+                  value={item.target_sets}
+                  min={1}
+                  max={20}
+                  onChange={(v) => update(index, { ...item, target_sets: v })}
+                />
+                <Stepper
+                  compact
+                  label="Repetições"
+                  value={item.target_reps}
+                  min={1}
+                  max={100}
+                  onChange={(v) => update(index, { ...item, target_reps: v })}
+                />
               </View>
               <View style={styles.grid}>
                 <Stepper
@@ -245,14 +303,27 @@ export function PlanEditor({ plan }: Props) {
                   max={1000}
                   onChange={(v) => update(index, { ...item, target_weight_kg: v || null })}
                 />
-                <Stepper compact label="Descanso (s)" value={item.rest_seconds} step={15} max={900} onChange={(v) => update(index, { ...item, rest_seconds: v })} />
+                <Stepper
+                  compact
+                  label="Descanso (s)"
+                  value={item.rest_seconds}
+                  step={15}
+                  max={900}
+                  onChange={(v) => update(index, { ...item, rest_seconds: v })}
+                />
               </View>
             </Card>
           </Animated.View>
         );
       })}
 
-      <Button title="Adicionar exercícios" icon="add" variant="outline" onPress={addExercises} testID="plan-add-exercise" />
+      <Button
+        title="Adicionar exercícios"
+        icon="add"
+        variant="outline"
+        onPress={addExercises}
+        testID="plan-add-exercise"
+      />
     </Screen>
   );
 }

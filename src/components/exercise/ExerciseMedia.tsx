@@ -25,7 +25,15 @@ type Props = {
  * - URL remota opcional (Supabase Storage) com cache em memória e disco.
  * - Imagem estática como placeholder e fallback se o GIF não carregar.
  */
-export function ExerciseMedia({ mediaKey, mediaUrl, name, animated = true, size, style, rounded = radii.md }: Props) {
+export function ExerciseMedia({
+  mediaKey,
+  mediaUrl,
+  name,
+  animated = true,
+  size,
+  style,
+  rounded = radii.md,
+}: Props) {
   const { colors } = useTheme();
   const [failed, setFailed] = useState(false);
   const local = mediaKey ? EXERCISE_MEDIA[mediaKey] : undefined;
@@ -34,13 +42,20 @@ export function ExerciseMedia({ mediaKey, mediaUrl, name, animated = true, size,
   const source = failed
     ? local?.poster
     : animated
-      ? (mediaUrl ? { uri: mediaUrl } : local?.gif)
-      : local?.poster ?? (mediaUrl ? { uri: mediaUrl } : undefined);
+      ? mediaUrl
+        ? { uri: mediaUrl }
+        : local?.gif
+      : (local?.poster ?? (mediaUrl ? { uri: mediaUrl } : undefined));
 
   if (!source) {
     return (
       <View
-        style={[styles.fallback, dims, { backgroundColor: colors.surfaceAlt, borderRadius: rounded }, style]}
+        style={[
+          styles.fallback,
+          dims,
+          { backgroundColor: colors.surfaceAlt, borderRadius: rounded },
+          style,
+        ]}
         accessibilityLabel={`Sem demonstração para ${name}`}>
         <Icon name="barbell-outline" size={size ? size * 0.4 : 40} color="textSubtle" />
         {!size || size > 100 ? (
@@ -64,7 +79,11 @@ export function ExerciseMedia({ mediaKey, mediaUrl, name, animated = true, size,
       recyclingKey={mediaKey ?? mediaUrl ?? name}
       onError={() => setFailed(true)}
       accessibilityLabel={`Demonstração animada: ${name}`}
-      style={[dims, { borderRadius: rounded, backgroundColor: colors.surface }, style as ImageStyle]}
+      style={[
+        dims,
+        { borderRadius: rounded, backgroundColor: colors.surface },
+        style as ImageStyle,
+      ]}
     />
   );
 }

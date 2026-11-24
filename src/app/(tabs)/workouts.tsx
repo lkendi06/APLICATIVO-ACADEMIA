@@ -32,10 +32,30 @@ export default function Workouts() {
       tabBarSpace
       refreshing={plans.isRefetching}
       onRefresh={plans.refetch}
-      right={<IconButton icon="add" tone="primary" label="Novo treino" onPress={() => router.push('/workouts/new')} testID="workouts-new" />}>
+      right={
+        <IconButton
+          icon="add"
+          tone="primary"
+          label="Novo treino"
+          onPress={() => router.push('/workouts/new')}
+          testID="workouts-new"
+        />
+      }>
       <View style={{ flexDirection: 'row', gap: spacing.md }}>
-        <Button title="Exercícios" icon="library-outline" variant="secondary" style={{ flex: 1 }} onPress={() => router.push('/exercises')} />
-        <Button title="Histórico" icon="time-outline" variant="secondary" style={{ flex: 1 }} onPress={() => router.push('/history')} />
+        <Button
+          title="Exercícios"
+          icon="library-outline"
+          variant="secondary"
+          style={{ flex: 1 }}
+          onPress={() => router.push('/exercises')}
+        />
+        <Button
+          title="Histórico"
+          icon="time-outline"
+          variant="secondary"
+          style={{ flex: 1 }}
+          onPress={() => router.push('/history')}
+        />
       </View>
 
       {plans.isLoading ? (
@@ -87,7 +107,10 @@ function PlanCard({ plan, index }: { plan: PlanWithItems; index: number }) {
   };
 
   return (
-    <Card onPress={() => router.push(`/workouts/${plan.id}`)} accessibilityLabel={`Treino ${plan.name}`} style={{ gap: spacing.md }}>
+    <Card
+      onPress={() => router.push(`/workouts/${plan.id}`)}
+      accessibilityLabel={`Treino ${plan.name}`}
+      style={{ gap: spacing.md }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
         <View style={[styles.letter, { backgroundColor: accent }]}>
           <Text variant="h3" style={{ color: colors.onPrimary }}>
@@ -99,16 +122,37 @@ function PlanCard({ plan, index }: { plan: PlanWithItems; index: number }) {
             {plan.name}
           </Text>
           <Text variant="caption" color="textMuted" numberOfLines={1}>
-            {plan.muscle_groups.length ? plan.muscle_groups.map((m) => MUSCLE_LABEL[m]).join(' · ') : 'Sem grupos definidos'}
+            {plan.muscle_groups.length
+              ? plan.muscle_groups.map((m) => MUSCLE_LABEL[m]).join(' · ')
+              : 'Sem grupos definidos'}
           </Text>
         </View>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.lg }}>
         <Meta icon="list-outline" text={`${plan.items.length} exercícios`} />
-        <Meta icon="layers-outline" text={`${plan.items.reduce((a, i) => a + i.target_sets, 0)} séries`} />
+        <Meta
+          icon="layers-outline"
+          text={`${plan.items.reduce((a, i) => a + i.target_sets, 0)} séries`}
+        />
         <View style={{ flex: 1 }} />
-        <IconButton icon="copy-outline" size={34} label="Duplicar treino" onPress={() => dup.mutate(plan.id, { onSuccess: () => toast('Treino duplicado.'), onError: (e) => toast(friendlyError(e), 'error') })} />
-        <IconButton icon="trash-outline" size={34} tone="danger" label="Excluir treino" onPress={onDelete} />
+        <IconButton
+          icon="copy-outline"
+          size={34}
+          label="Duplicar treino"
+          onPress={() =>
+            dup.mutate(plan.id, {
+              onSuccess: () => toast('Treino duplicado.'),
+              onError: (e) => toast(friendlyError(e), 'error'),
+            })
+          }
+        />
+        <IconButton
+          icon="trash-outline"
+          size={34}
+          tone="danger"
+          label="Excluir treino"
+          onPress={onDelete}
+        />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Iniciar ${plan.name}`}
@@ -133,6 +177,12 @@ function Meta({ icon, text }: { icon: React.ComponentProps<typeof Icon>['name'];
 }
 
 const styles = StyleSheet.create({
-  letter: { width: 44, height: 44, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center' },
+  letter: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   play: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },
 });

@@ -30,7 +30,11 @@ export function Skeleton({
   return (
     <Animated.View
       accessibilityLabel="Carregando"
-      style={[{ height, width, borderRadius: radius, backgroundColor: colors.skeleton }, animated, style]}
+      style={[
+        { height, width, borderRadius: radius, backgroundColor: colors.skeleton },
+        animated,
+        style,
+      ]}
     />
   );
 }

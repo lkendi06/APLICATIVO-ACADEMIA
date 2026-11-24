@@ -58,7 +58,10 @@ const secure = {
     await secure.removeItem(key);
     const chunks = Math.ceil(value.length / CHUNK_SIZE) || 1;
     for (let i = 0; i < chunks; i++) {
-      await SecureStore.setItemAsync(`${k}.${i}`, value.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE));
+      await SecureStore.setItemAsync(
+        `${k}.${i}`,
+        value.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
+      );
     }
     await SecureStore.setItemAsync(`${k}.n`, String(chunks));
   },

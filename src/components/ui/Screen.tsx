@@ -61,7 +61,11 @@ export function Screen({
             />
           ) : null}
           {!largeTitle && title ? (
-            <Text variant="h3" style={styles.headerTitle} numberOfLines={1} accessibilityRole="header">
+            <Text
+              variant="h3"
+              style={styles.headerTitle}
+              numberOfLines={1}
+              accessibilityRole="header">
               {title}
             </Text>
           ) : (
@@ -104,7 +108,8 @@ export function Screen({
       {children}
     </ScrollView>
   ) : (
-    <View style={[styles.content, { flex: 1, paddingBottom: footer ? 0 : bottomPad }, contentStyle]}>
+    <View
+      style={[styles.content, { flex: 1, paddingBottom: footer ? 0 : bottomPad }, contentStyle]}>
       {children}
     </View>
   );
@@ -137,7 +142,14 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: spacing.lg, paddingBottom: spacing.sm },
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: 44 },
   headerTitle: { flex: 1, textAlign: 'center' },
-  content: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm, gap: spacing.lg, width: '100%', maxWidth: 720, alignSelf: 'center' },
+  content: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
+    gap: spacing.lg,
+    width: '100%',
+    maxWidth: 720,
+    alignSelf: 'center',
+  },
   footer: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,

@@ -1,6 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import Svg, { Circle, Defs, Line, LinearGradient, Path, Stop, Text as SvgText } from 'react-native-svg';
+import Svg, {
+  Circle,
+  Defs,
+  Line,
+  LinearGradient,
+  Path,
+  Stop,
+  Text as SvgText,
+} from 'react-native-svg';
 
 import { Text } from '@/components/ui/Text';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -23,7 +31,15 @@ type Props = {
 const PAD = { top: 16, right: 12, bottom: 24, left: 40 };
 
 /** Gráfico de linha leve (SVG), com área preenchida e toque para ver valores. */
-export function LineChart({ data, height = 200, unit = '', decimals = 1, color, reference, accessibilityLabel }: Props) {
+export function LineChart({
+  data,
+  height = 200,
+  unit = '',
+  decimals = 1,
+  color,
+  reference,
+  accessibilityLabel,
+}: Props) {
   const { colors } = useTheme();
   const stroke = color ?? colors.chart[0];
   const [width, setWidth] = useState(0);
@@ -96,31 +112,94 @@ export function LineChart({ data, height = 200, unit = '', decimals = 1, color, 
               </LinearGradient>
             </Defs>
             {geo.ticks.map((v, i) => (
-              <Line key={i} x1={PAD.left} x2={width - PAD.right} y1={geo.sy(v)} y2={geo.sy(v)} stroke={colors.border} strokeDasharray="3 4" />
+              <Line
+                key={i}
+                x1={PAD.left}
+                x2={width - PAD.right}
+                y1={geo.sy(v)}
+                y2={geo.sy(v)}
+                stroke={colors.border}
+                strokeDasharray="3 4"
+              />
             ))}
             {geo.ticks.map((v, i) => (
-              <SvgText key={`t${i}`} x={PAD.left - 6} y={geo.sy(v) + 4} fontSize={10} fill={colors.textSubtle} textAnchor="end" fontFamily={fonts.medium}>
+              <SvgText
+                key={`t${i}`}
+                x={PAD.left - 6}
+                y={geo.sy(v) + 4}
+                fontSize={10}
+                fill={colors.textSubtle}
+                textAnchor="end"
+                fontFamily={fonts.medium}>
                 {formatNumber(v, v >= 100 ? 0 : decimals)}
               </SvgText>
             ))}
             {reference ? (
               <>
-                <Line x1={PAD.left} x2={width - PAD.right} y1={geo.sy(reference.value)} y2={geo.sy(reference.value)} stroke={colors.accent} strokeWidth={1.5} strokeDasharray="6 4" />
-                <SvgText x={width - PAD.right} y={geo.sy(reference.value) - 5} fontSize={10} fill={colors.accent} textAnchor="end" fontFamily={fonts.semibold}>
+                <Line
+                  x1={PAD.left}
+                  x2={width - PAD.right}
+                  y1={geo.sy(reference.value)}
+                  y2={geo.sy(reference.value)}
+                  stroke={colors.accent}
+                  strokeWidth={1.5}
+                  strokeDasharray="6 4"
+                />
+                <SvgText
+                  x={width - PAD.right}
+                  y={geo.sy(reference.value) - 5}
+                  fontSize={10}
+                  fill={colors.accent}
+                  textAnchor="end"
+                  fontFamily={fonts.semibold}>
                   {reference.label}
                 </SvgText>
               </>
             ) : null}
             {geo.pts.length > 1 ? <Path d={geo.area} fill="url(#area)" /> : null}
-            <Path d={geo.line} stroke={stroke} strokeWidth={2.5} fill="none" strokeLinejoin="round" strokeLinecap="round" />
+            <Path
+              d={geo.line}
+              stroke={stroke}
+              strokeWidth={2.5}
+              fill="none"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
             {geo.pts.map((p, i) => (
-              <Circle key={i} cx={p.x} cy={p.y} r={i === selected ? 6 : geo.pts.length > 40 ? 0 : 3.5} fill={i === selected ? stroke : colors.surface} stroke={stroke} strokeWidth={2} />
+              <Circle
+                key={i}
+                cx={p.x}
+                cy={p.y}
+                r={i === selected ? 6 : geo.pts.length > 40 ? 0 : 3.5}
+                fill={i === selected ? stroke : colors.surface}
+                stroke={stroke}
+                strokeWidth={2}
+              />
             ))}
-            {sel ? <Line x1={sel.x} x2={sel.x} y1={PAD.top} y2={PAD.top + geo.h} stroke={colors.borderStrong} /> : null}
-            <SvgText x={PAD.left} y={height - 6} fontSize={10} fill={colors.textSubtle} fontFamily={fonts.medium}>
+            {sel ? (
+              <Line
+                x1={sel.x}
+                x2={sel.x}
+                y1={PAD.top}
+                y2={PAD.top + geo.h}
+                stroke={colors.borderStrong}
+              />
+            ) : null}
+            <SvgText
+              x={PAD.left}
+              y={height - 6}
+              fontSize={10}
+              fill={colors.textSubtle}
+              fontFamily={fonts.medium}>
               {formatDate(sorted[0].x, { day: '2-digit', month: 'short' })}
             </SvgText>
-            <SvgText x={width - PAD.right} y={height - 6} fontSize={10} fill={colors.textSubtle} textAnchor="end" fontFamily={fonts.medium}>
+            <SvgText
+              x={width - PAD.right}
+              y={height - 6}
+              fontSize={10}
+              fill={colors.textSubtle}
+              textAnchor="end"
+              fontFamily={fonts.medium}>
               {formatDate(sorted[sorted.length - 1].x, { day: '2-digit', month: 'short' })}
             </SvgText>
           </Svg>

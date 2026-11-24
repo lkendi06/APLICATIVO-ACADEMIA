@@ -18,7 +18,8 @@ export type MuscleGroup =
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 export type SessionStatus = 'active' | 'completed';
-export type GoalType = 'target_weight' | 'weekly_workouts' | 'body_fat' | 'exercise_load' | 'custom';
+export type GoalType =
+  'target_weight' | 'weekly_workouts' | 'body_fat' | 'exercise_load' | 'custom';
 export type GoalStatus = 'active' | 'achieved' | 'archived';
 export type FitnessGoal = 'lose_weight' | 'gain_muscle' | 'maintain' | 'endurance' | 'health';
 export type Sex = 'female' | 'male' | 'other' | 'prefer_not_to_say';
@@ -235,17 +236,121 @@ type Auto = 'created_at' | 'updated_at';
 export type Database = {
   public: {
     Tables: {
-      profiles: Table<Profile, Insertable<Profile, Auto | 'avatar_path' | 'birth_date' | 'sex' | 'fitness_goal' | 'experience_level' | 'weekly_workout_goal' | 'terms_accepted_at'>>;
-      user_preferences: Table<UserPreferences, Insertable<UserPreferences, Exclude<keyof UserPreferences, 'user_id'>>>;
+      profiles: Table<
+        Profile,
+        Insertable<
+          Profile,
+          | Auto
+          | 'avatar_path'
+          | 'birth_date'
+          | 'sex'
+          | 'fitness_goal'
+          | 'experience_level'
+          | 'weekly_workout_goal'
+          | 'terms_accepted_at'
+        >
+      >;
+      user_preferences: Table<
+        UserPreferences,
+        Insertable<UserPreferences, Exclude<keyof UserPreferences, 'user_id'>>
+      >;
       exercises: Table<Exercise, Insertable<Exercise, Auto | 'id'>>;
-      exercise_favorites: Table<ExerciseFavorite, Insertable<ExerciseFavorite, 'user_id' | 'created_at'>>;
-      workout_plans: Table<WorkoutPlan, Insertable<WorkoutPlan, Auto | 'id' | 'user_id' | 'description' | 'muscle_groups' | 'color' | 'position' | 'archived_at'>>;
-      workout_plan_exercises: Table<WorkoutPlanExercise, Insertable<WorkoutPlanExercise, Auto | 'id' | 'user_id' | 'target_sets' | 'target_reps' | 'target_weight_kg' | 'rest_seconds' | 'notes'>>;
-      workout_sessions: Table<WorkoutSession, Insertable<WorkoutSession, Auto | 'id' | 'user_id' | 'plan_id' | 'status' | 'started_at' | 'ended_at' | 'paused_at' | 'total_paused_seconds' | 'duration_seconds' | 'notes'>>;
-      workout_session_exercises: Table<WorkoutSessionExercise, Insertable<WorkoutSessionExercise, Auto | 'id' | 'user_id' | 'plan_exercise_id' | 'position' | 'target_sets' | 'target_reps' | 'target_weight_kg' | 'rest_seconds' | 'notes'>>;
-      workout_sets: Table<WorkoutSet, Insertable<WorkoutSet, Auto | 'id' | 'user_id' | 'reps' | 'weight_kg' | 'duration_seconds' | 'completed' | 'completed_at'>>;
+      exercise_favorites: Table<
+        ExerciseFavorite,
+        Insertable<ExerciseFavorite, 'user_id' | 'created_at'>
+      >;
+      workout_plans: Table<
+        WorkoutPlan,
+        Insertable<
+          WorkoutPlan,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'description'
+          | 'muscle_groups'
+          | 'color'
+          | 'position'
+          | 'archived_at'
+        >
+      >;
+      workout_plan_exercises: Table<
+        WorkoutPlanExercise,
+        Insertable<
+          WorkoutPlanExercise,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'target_sets'
+          | 'target_reps'
+          | 'target_weight_kg'
+          | 'rest_seconds'
+          | 'notes'
+        >
+      >;
+      workout_sessions: Table<
+        WorkoutSession,
+        Insertable<
+          WorkoutSession,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'plan_id'
+          | 'status'
+          | 'started_at'
+          | 'ended_at'
+          | 'paused_at'
+          | 'total_paused_seconds'
+          | 'duration_seconds'
+          | 'notes'
+        >
+      >;
+      workout_session_exercises: Table<
+        WorkoutSessionExercise,
+        Insertable<
+          WorkoutSessionExercise,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'plan_exercise_id'
+          | 'position'
+          | 'target_sets'
+          | 'target_reps'
+          | 'target_weight_kg'
+          | 'rest_seconds'
+          | 'notes'
+        >
+      >;
+      workout_sets: Table<
+        WorkoutSet,
+        Insertable<
+          WorkoutSet,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'reps'
+          | 'weight_kg'
+          | 'duration_seconds'
+          | 'completed'
+          | 'completed_at'
+        >
+      >;
       body_metrics: Table<BodyMetric, Insertable<BodyMetric, Exclude<keyof BodyMetric, never>>>;
-      user_goals: Table<UserGoal, Insertable<UserGoal, Auto | 'id' | 'user_id' | 'target_value' | 'start_value' | 'unit' | 'exercise_id' | 'deadline' | 'status' | 'achieved_at'>>;
+      user_goals: Table<
+        UserGoal,
+        Insertable<
+          UserGoal,
+          | Auto
+          | 'id'
+          | 'user_id'
+          | 'target_value'
+          | 'start_value'
+          | 'unit'
+          | 'exercise_id'
+          | 'deadline'
+          | 'status'
+          | 'achieved_at'
+        >
+      >;
     };
     Views: {
       workout_session_stats: { Row: WorkoutSessionStats; Relationships: [] };
@@ -254,8 +359,14 @@ export type Database = {
     Functions: {
       delete_my_account: { Args: Record<string, never>; Returns: undefined };
       reorder_plan_exercises: { Args: { p_plan_id: string; p_ids: string[] }; Returns: undefined };
-      duplicate_workout_plan: { Args: { p_plan_id: string; p_name?: string | null }; Returns: string };
-      previous_sets: { Args: { p_exercise_id: string; p_exclude_session?: string | null }; Returns: PreviousSet[] };
+      duplicate_workout_plan: {
+        Args: { p_plan_id: string; p_name?: string | null };
+        Returns: string;
+      };
+      previous_sets: {
+        Args: { p_exercise_id: string; p_exclude_session?: string | null };
+        Returns: PreviousSet[];
+      };
     };
     Enums: {
       muscle_group: MuscleGroup;

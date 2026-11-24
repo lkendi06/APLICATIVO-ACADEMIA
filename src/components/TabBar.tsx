@@ -56,7 +56,14 @@ export function TabBar({ state, navigateToTab }: BottomTabBarProps) {
               <View style={[styles.centerBtn, { backgroundColor: colors.primary }]}>
                 <Icon name={active ? 'pulse' : 'add'} size={28} color={colors.onPrimary} />
               </View>
-              {active ? <View style={[styles.liveDot, { backgroundColor: colors.danger, borderColor: colors.tabBar }]} /> : null}
+              {active ? (
+                <View
+                  style={[
+                    styles.liveDot,
+                    { backgroundColor: colors.danger, borderColor: colors.tabBar },
+                  ]}
+                />
+              ) : null}
             </Pressable>
           );
         }
@@ -75,7 +82,19 @@ export function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   );
 }
 
-function TabItem({ label, icon, focused, onPress, testID }: { label: string; icon: IconName; focused: boolean; onPress: () => void; testID: string }) {
+function TabItem({
+  label,
+  icon,
+  focused,
+  onPress,
+  testID,
+}: {
+  label: string;
+  icon: IconName;
+  focused: boolean;
+  onPress: () => void;
+  testID: string;
+}) {
   const { colors } = useTheme();
   const indicator = useAnimatedStyle(() => ({
     opacity: withSpring(focused ? 1 : 0),
@@ -91,7 +110,9 @@ function TabItem({ label, icon, focused, onPress, testID }: { label: string; ico
       style={styles.item}>
       <Animated.View style={[styles.indicator, { backgroundColor: colors.primary }, indicator]} />
       <Icon name={icon} size={22} color={focused ? colors.text : colors.textSubtle} />
-      <Text variant="caption" style={{ color: focused ? colors.text : colors.textSubtle, fontSize: 11 }}>
+      <Text
+        variant="caption"
+        style={{ color: focused ? colors.text : colors.textSubtle, fontSize: 11 }}>
         {label}
       </Text>
     </Pressable>
@@ -116,5 +137,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: -22,
   },
-  liveDot: { position: 'absolute', top: -20, right: '30%', width: 12, height: 12, borderRadius: 6, borderWidth: 2 },
+  liveDot: {
+    position: 'absolute',
+    top: -20,
+    right: '30%',
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 2,
+  },
 });

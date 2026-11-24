@@ -63,10 +63,16 @@ export function formatClock(totalSeconds: number): string {
   return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
-export function formatDate(iso: string | Date | null | undefined, opts?: Intl.DateTimeFormatOptions) {
+export function formatDate(
+  iso: string | Date | null | undefined,
+  opts?: Intl.DateTimeFormatOptions,
+) {
   if (!iso) return '—';
   const d = typeof iso === 'string' ? new Date(iso) : iso;
-  return new Intl.DateTimeFormat('pt-BR', opts ?? { day: '2-digit', month: 'short', year: 'numeric' })
+  return new Intl.DateTimeFormat(
+    'pt-BR',
+    opts ?? { day: '2-digit', month: 'short', year: 'numeric' },
+  )
     .format(d)
     .replace('.', '');
 }
@@ -110,4 +116,12 @@ export function parseDecimal(input: string | number | null | undefined): number 
   if (s === '') return null;
   const n = Number(s);
   return Number.isFinite(n) ? n : null;
+}
+
+/** Máscara simples DD/MM/AAAA enquanto o usuário digita. */
+export function maskBrDate(input: string): string {
+  const digits = input.replace(/\D/g, '').slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
 }

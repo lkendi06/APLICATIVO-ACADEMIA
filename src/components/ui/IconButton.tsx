@@ -15,7 +15,15 @@ type Props = {
   testID?: string;
 };
 
-export function IconButton({ icon, onPress, label, size = 40, tone = 'default', disabled, testID }: Props) {
+export function IconButton({
+  icon,
+  onPress,
+  label,
+  size = 40,
+  tone = 'default',
+  disabled,
+  testID,
+}: Props) {
   const { colors } = useTheme();
   const bg =
     tone === 'primary'
@@ -25,7 +33,8 @@ export function IconButton({ icon, onPress, label, size = 40, tone = 'default', 
         : tone === 'plain'
           ? 'transparent'
           : colors.surfaceAlt;
-  const fg = tone === 'primary' ? colors.onPrimary : tone === 'danger' ? colors.danger : colors.text;
+  const fg =
+    tone === 'primary' ? colors.onPrimary : tone === 'danger' ? colors.danger : colors.text;
   return (
     <Pressable
       testID={testID}
@@ -36,7 +45,12 @@ export function IconButton({ icon, onPress, label, size = 40, tone = 'default', 
       onPress={onPress}
       style={({ pressed }) => [
         styles.base,
-        { width: size, height: size, backgroundColor: bg, opacity: disabled ? 0.4 : pressed ? 0.7 : 1 },
+        {
+          width: size,
+          height: size,
+          backgroundColor: bg,
+          opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
+        },
       ]}>
       <Icon name={icon} size={size * 0.5} color={fg} />
     </Pressable>

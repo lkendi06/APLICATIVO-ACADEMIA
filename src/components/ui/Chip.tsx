@@ -32,7 +32,9 @@ export function Chip({ label, selected, onPress, icon, testID }: Props) {
           opacity: pressed ? 0.8 : 1,
         },
       ]}>
-      {icon ? <Icon name={icon} size={14} color={selected ? colors.onPrimary : colors.textMuted} /> : null}
+      {icon ? (
+        <Icon name={icon} size={14} color={selected ? colors.onPrimary : colors.textMuted} />
+      ) : null}
       <Text variant="label" style={{ color: selected ? colors.onPrimary : colors.text }}>
         {label}
       </Text>

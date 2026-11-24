@@ -4,12 +4,7 @@
  */
 
 export type BmiCategory =
-  | 'underweight'
-  | 'normal'
-  | 'overweight'
-  | 'obesity1'
-  | 'obesity2'
-  | 'obesity3';
+  'underweight' | 'normal' | 'overweight' | 'obesity1' | 'obesity2' | 'obesity3';
 
 export const BMI_CATEGORIES: {
   key: BmiCategory;
@@ -37,13 +32,15 @@ export function classifyBmi(bmi: number) {
   return BMI_CATEGORIES.find((c) => bmi >= c.min && bmi < c.max) ?? BMI_CATEGORIES[0];
 }
 
-export function ageFromBirthDate(birthDate: string | null | undefined, now = new Date()): number | null {
+export function ageFromBirthDate(
+  birthDate: string | null | undefined,
+  now = new Date(),
+): number | null {
   if (!birthDate) return null;
   const [y, m, d] = birthDate.split('-').map(Number);
   if (!y || !m || !d) return null;
   let age = now.getFullYear() - y;
-  const beforeBirthday =
-    now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d);
+  const beforeBirthday = now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d);
   if (beforeBirthday) age -= 1;
   return age;
 }

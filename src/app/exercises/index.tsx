@@ -4,7 +4,16 @@ import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ExerciseRow } from '@/components/exercise/ExerciseRow';
-import { Button, Chip, EmptyState, ErrorView, IconButton, ListSkeleton, Text, TextField } from '@/components/ui';
+import {
+  Button,
+  Chip,
+  EmptyState,
+  ErrorView,
+  IconButton,
+  ListSkeleton,
+  Text,
+  TextField,
+} from '@/components/ui';
 import { MUSCLE_GROUPS } from '@/constants/muscles';
 import { useExercises, useFavorites } from '@/hooks/queries';
 import { exercisePicker } from '@/services/exercisePicker';
@@ -12,11 +21,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { spacing } from '@/theme/tokens';
 import type { Exercise, MuscleGroup } from '@/types/database';
 
-const normalize = (s: string) =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
+const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 export default function ExerciseLibrary() {
   const { pick } = useLocalSearchParams<{ pick?: string }>();
@@ -35,21 +40,28 @@ export default function ExerciseLibrary() {
   const favSet = useMemo(() => new Set(favorites.data ?? []), [favorites.data]);
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
-    return (exercises.data ?? []).filter((e) => {
-      if (group === 'fav' && !favSet.has(e.id)) return false;
-      if (group !== 'all' && group !== 'fav' && e.primary_muscle !== group && !e.secondary_muscles.includes(group))
-        return false;
-      if (q && !normalize(`${e.name} ${e.equipment}`).includes(q)) return false;
-      return true;
-    }).sort((a, b) => {
-      // No filtro por grupo, o músculo principal vem primeiro.
-      if (group !== 'all' && group !== 'fav') {
-        const pa = a.primary_muscle === group ? 0 : 1;
-        const pb = b.primary_muscle === group ? 0 : 1;
-        if (pa !== pb) return pa - pb;
-      }
-      return a.name.localeCompare(b.name, 'pt-BR');
-    });
+    return (exercises.data ?? [])
+      .filter((e) => {
+        if (group === 'fav' && !favSet.has(e.id)) return false;
+        if (
+          group !== 'all' &&
+          group !== 'fav' &&
+          e.primary_muscle !== group &&
+          !e.secondary_muscles.includes(group)
+        )
+          return false;
+        if (q && !normalize(`${e.name} ${e.equipment}`).includes(q)) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        // No filtro por grupo, o músculo principal vem primeiro.
+        if (group !== 'all' && group !== 'fav') {
+          const pa = a.primary_muscle === group ? 0 : 1;
+          const pb = b.primary_muscle === group ? 0 : 1;
+          if (pa !== pb) return pa - pb;
+        }
+        return a.name.localeCompare(b.name, 'pt-BR');
+      });
   }, [exercises.data, query, group, favSet]);
 
   const onPress = (e: Exercise) => {
@@ -67,9 +79,14 @@ export default function ExerciseLibrary() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top + spacing.sm }}>
+    <View
+      style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top + spacing.sm }}>
       <View style={styles.header}>
-        <IconButton icon={picking ? 'close' : 'chevron-back'} label={picking ? 'Cancelar' : 'Voltar'} onPress={() => router.back()} />
+        <IconButton
+          icon={picking ? 'close' : 'chevron-back'}
+          label={picking ? 'Cancelar' : 'Voltar'}
+          onPress={() => router.back()}
+        />
         <Text variant="h3" style={{ flex: 1, textAlign: 'center' }}>
           {picking ? 'Escolher exercícios' : 'Biblioteca de exercícios'}
         </Text>
@@ -87,11 +104,26 @@ export default function ExerciseLibrary() {
           testID="exercise-search"
         />
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.chips}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ flexGrow: 0 }}
+        contentContainerStyle={styles.chips}>
         <Chip label="Todos" selected={group === 'all'} onPress={() => setGroup('all')} />
-        <Chip label="Favoritos" icon="heart" selected={group === 'fav'} onPress={() => setGroup('fav')} />
+        <Chip
+          label="Favoritos"
+          icon="heart"
+          selected={group === 'fav'}
+          onPress={() => setGroup('fav')}
+        />
         {MUSCLE_GROUPS.map((m) => (
-          <Chip key={m.key} label={m.label} selected={group === m.key} onPress={() => setGroup(m.key)} testID={`chip-${m.key}`} />
+          <Chip
+            key={m.key}
+            label={m.label}
+            selected={group === m.key}
+            onPress={() => setGroup(m.key)}
+            testID={`chip-${m.key}`}
+          />
         ))}
       </ScrollView>
       {exercises.isLoading ? (
@@ -104,7 +136,11 @@ export default function ExerciseLibrary() {
         <FlatList
           data={filtered}
           keyExtractor={(e) => e.id}
-          contentContainerStyle={{ padding: spacing.lg, gap: spacing.sm, paddingBottom: insets.bottom + (picking ? 110 : 40) }}
+          contentContainerStyle={{
+            padding: spacing.lg,
+            gap: spacing.sm,
+            paddingBottom: insets.bottom + (picking ? 110 : 40),
+          }}
           initialNumToRender={12}
           windowSize={7}
           ListHeaderComponent={
@@ -117,7 +153,11 @@ export default function ExerciseLibrary() {
               compact
               icon="search-outline"
               title="Nada encontrado"
-              message={group === 'fav' ? 'Toque no coração na página de um exercício para favoritá-lo.' : 'Tente outro termo ou grupo muscular.'}
+              message={
+                group === 'fav'
+                  ? 'Toque no coração na página de um exercício para favoritá-lo.'
+                  : 'Tente outro termo ou grupo muscular.'
+              }
             />
           }
           renderItem={({ item }) => (
@@ -131,9 +171,19 @@ export default function ExerciseLibrary() {
         />
       )}
       {picking && multiple ? (
-        <View style={[styles.footer, { paddingBottom: insets.bottom + spacing.md, backgroundColor: colors.background, borderTopColor: colors.border }]}>
+        <View
+          style={[
+            styles.footer,
+            {
+              paddingBottom: insets.bottom + spacing.md,
+              backgroundColor: colors.background,
+              borderTopColor: colors.border,
+            },
+          ]}>
           <Button
-            title={selected.length ? `Adicionar ${selected.length} exercício(s)` : 'Selecione exercícios'}
+            title={
+              selected.length ? `Adicionar ${selected.length} exercício(s)` : 'Selecione exercícios'
+            }
             size="lg"
             disabled={!selected.length}
             onPress={confirm}
@@ -146,7 +196,19 @@ export default function ExerciseLibrary() {
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.lg, marginBottom: spacing.sm },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
+  },
   chips: { gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, padding: spacing.lg, borderTopWidth: StyleSheet.hairlineWidth },
+  footer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: spacing.lg,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
 });

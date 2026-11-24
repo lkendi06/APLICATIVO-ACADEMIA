@@ -165,9 +165,19 @@ export const activeWorkout = {
     });
     set({ userId: params.userId, session, exercises, sets, rest: null });
 
-    await enqueue({ table: 'workout_sessions', kind: 'upsert', id: session.id, payload: sessionPayload(session) });
+    await enqueue({
+      table: 'workout_sessions',
+      kind: 'upsert',
+      id: session.id,
+      payload: sessionPayload(session),
+    });
     for (const se of exercises) {
-      await enqueue({ table: 'workout_session_exercises', kind: 'upsert', id: se.id, payload: sePayload(se) });
+      await enqueue({
+        table: 'workout_session_exercises',
+        kind: 'upsert',
+        id: se.id,
+        payload: sePayload(se),
+      });
     }
     for (const s of sets) {
       await enqueue({ table: 'workout_sets', kind: 'upsert', id: s.id, payload: setPayload(s) });
@@ -176,7 +186,10 @@ export const activeWorkout = {
     return session;
   },
 
-  async addExercise(exercise: ExerciseLite, opts?: { restSeconds?: number; sets?: number; reps?: number; weight?: number }) {
+  async addExercise(
+    exercise: ExerciseLite,
+    opts?: { restSeconds?: number; sets?: number; reps?: number; weight?: number },
+  ) {
     if (!state) return;
     const ts = nowIso();
     const se: ActiveExercise = {
@@ -199,8 +212,14 @@ export const activeWorkout = {
       newSet(se, i + 1, se.target_reps ?? 10, opts?.weight ?? 0),
     );
     set({ ...state, exercises: [...state.exercises, se], sets: [...state.sets, ...newSets] });
-    await enqueue({ table: 'workout_session_exercises', kind: 'upsert', id: se.id, payload: sePayload(se) });
-    for (const s of newSets) await enqueue({ table: 'workout_sets', kind: 'upsert', id: s.id, payload: setPayload(s) });
+    await enqueue({
+      table: 'workout_session_exercises',
+      kind: 'upsert',
+      id: se.id,
+      payload: sePayload(se),
+    });
+    for (const s of newSets)
+      await enqueue({ table: 'workout_sets', kind: 'upsert', id: s.id, payload: setPayload(s) });
     sync();
   },
 
@@ -222,13 +241,21 @@ export const activeWorkout = {
     if (!se) return;
     const existing = state.sets.filter((s) => s.session_exercise_id === sessionExerciseId);
     const last = existing[existing.length - 1];
-    const s = newSet(se, existing.length + 1, last?.reps ?? se.target_reps ?? 10, last?.weight_kg ?? se.target_weight_kg ?? 0);
+    const s = newSet(
+      se,
+      existing.length + 1,
+      last?.reps ?? se.target_reps ?? 10,
+      last?.weight_kg ?? se.target_weight_kg ?? 0,
+    );
     set({ ...state, sets: [...state.sets, s] });
     await enqueue({ table: 'workout_sets', kind: 'upsert', id: s.id, payload: setPayload(s) });
     sync();
   },
 
-  async updateSet(setId: string, patch: Partial<Pick<WorkoutSet, 'reps' | 'weight_kg' | 'completed' | 'duration_seconds'>>) {
+  async updateSet(
+    setId: string,
+    patch: Partial<Pick<WorkoutSet, 'reps' | 'weight_kg' | 'completed' | 'duration_seconds'>>,
+  ) {
     if (!state) return;
     const ts = nowIso();
     let updated: WorkoutSet | undefined;
@@ -241,7 +268,12 @@ export const activeWorkout = {
     });
     if (!updated) return;
     set({ ...state, sets });
-    await enqueue({ table: 'workout_sets', kind: 'upsert', id: setId, payload: setPayload(updated) });
+    await enqueue({
+      table: 'workout_sets',
+      kind: 'upsert',
+      id: setId,
+      payload: setPayload(updated),
+    });
     sync();
   },
 
@@ -266,7 +298,8 @@ export const activeWorkout = {
       });
     set({ ...state, sets });
     await enqueue({ table: 'workout_sets', kind: 'delete', id: setId });
-    for (const c of changed) await enqueue({ table: 'workout_sets', kind: 'upsert', id: c.id, payload: setPayload(c) });
+    for (const c of changed)
+      await enqueue({ table: 'workout_sets', kind: 'upsert', id: c.id, payload: setPayload(c) });
     sync();
   },
 
@@ -277,7 +310,10 @@ export const activeWorkout = {
   adjustRest(deltaSeconds: number) {
     if (!state?.rest) return;
     const endsAt = Math.max(Date.now(), state.rest.endsAt + deltaSeconds * 1000);
-    set({ ...state, rest: { ...state.rest, endsAt, total: Math.max(1, state.rest.total + deltaSeconds) } });
+    set({
+      ...state,
+      rest: { ...state.rest, endsAt, total: Math.max(1, state.rest.total + deltaSeconds) },
+    });
   },
   stopRest() {
     if (!state) return;
@@ -288,7 +324,12 @@ export const activeWorkout = {
     if (!state || state.session.paused_at) return;
     const session = { ...state.session, paused_at: nowIso(), updated_at: nowIso() };
     set({ ...state, session, rest: null });
-    await enqueue({ table: 'workout_sessions', kind: 'upsert', id: session.id, payload: sessionPayload(session) });
+    await enqueue({
+      table: 'workout_sessions',
+      kind: 'upsert',
+      id: session.id,
+      payload: sessionPayload(session),
+    });
     sync();
   },
 
@@ -302,7 +343,12 @@ export const activeWorkout = {
       updated_at: nowIso(),
     };
     set({ ...state, session });
-    await enqueue({ table: 'workout_sessions', kind: 'upsert', id: session.id, payload: sessionPayload(session) });
+    await enqueue({
+      table: 'workout_sessions',
+      kind: 'upsert',
+      id: session.id,
+      payload: sessionPayload(session),
+    });
     sync();
   },
 
@@ -326,7 +372,12 @@ export const activeWorkout = {
       notes: notes?.trim() ? notes.trim() : current.session.notes,
       updated_at: ended,
     };
-    await enqueue({ table: 'workout_sessions', kind: 'upsert', id: session.id, payload: sessionPayload(session) });
+    await enqueue({
+      table: 'workout_sessions',
+      kind: 'upsert',
+      id: session.id,
+      payload: sessionPayload(session),
+    });
     lastFinished = {
       ...current,
       session: {
@@ -435,7 +486,11 @@ async function fetchActiveFromServer(userId: string): Promise<ActiveWorkoutState
   if (e2) throw e2;
   const ids = (exs ?? []).map((e) => e.id);
   const { data: sets, error: e3 } = ids.length
-    ? await supabase.from('workout_sets').select('*').in('session_exercise_id', ids).order('set_number')
+    ? await supabase
+        .from('workout_sets')
+        .select('*')
+        .in('session_exercise_id', ids)
+        .order('set_number')
     : { data: [] as WorkoutSet[], error: null };
   if (e3) throw e3;
   return {

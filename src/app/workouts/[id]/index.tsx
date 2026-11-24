@@ -15,7 +15,13 @@ import {
 } from '@/components/ui';
 import { useFeedback } from '@/contexts/FeedbackContext';
 import { MUSCLE_LABEL } from '@/constants/muscles';
-import { useDeletePlan, useDuplicatePlan, usePlan, useSessionStats, useUnits } from '@/hooks/queries';
+import {
+  useDeletePlan,
+  useDuplicatePlan,
+  usePlan,
+  useSessionStats,
+  useUnits,
+} from '@/hooks/queries';
 import { spacing } from '@/theme/tokens';
 import { friendlyError } from '@/utils/errors';
 import { formatDate, formatWeight } from '@/utils/format';
@@ -51,7 +57,13 @@ export default function PlanDetail() {
     <Screen
       back
       title={plan.data?.name ?? 'Treino'}
-      right={<IconButton icon="create-outline" label="Editar treino" onPress={() => router.push(`/workouts/${id}/edit`)} />}
+      right={
+        <IconButton
+          icon="create-outline"
+          label="Editar treino"
+          onPress={() => router.push(`/workouts/${id}/edit`)}
+        />
+      }
       footer={
         plan.data ? (
           <Button
@@ -78,23 +90,36 @@ export default function PlanDetail() {
               ))}
             </View>
             <Text variant="caption" color="textSubtle">
-              {lastDone ? `Último treino: ${formatDate(lastDone.started_at)}` : 'Ainda não realizado'}
+              {lastDone
+                ? `Último treino: ${formatDate(lastDone.started_at)}`
+                : 'Ainda não realizado'}
             </Text>
           </View>
 
           <SectionHeader title={`${plan.data.items.length} exercícios`} />
           {plan.data.items.map((item, i) => (
-            <Card key={item.id} onPress={() => router.push(`/exercises/${item.exercise_id}`)} accessibilityLabel={item.exercise.name}>
+            <Card
+              key={item.id}
+              onPress={() => router.push(`/exercises/${item.exercise_id}`)}
+              accessibilityLabel={item.exercise.name}>
               <View style={{ flexDirection: 'row', gap: spacing.md, alignItems: 'center' }}>
-                <ExerciseMedia mediaKey={item.exercise.media_key} mediaUrl={item.exercise.media_url} name={item.exercise.name} animated={false} size={56} />
+                <ExerciseMedia
+                  mediaKey={item.exercise.media_key}
+                  mediaUrl={item.exercise.media_url}
+                  name={item.exercise.name}
+                  animated={false}
+                  size={56}
+                />
                 <View style={{ flex: 1, gap: 2 }}>
                   <Text variant="bodyMedium">
                     {i + 1}. {item.exercise.name}
                   </Text>
                   <Text variant="caption" color="textMuted">
                     {item.target_sets} × {item.target_reps}
-                    {item.target_weight_kg ? ` · ${formatWeight(item.target_weight_kg, units.weight)}` : ''} · descanso{' '}
-                    {item.rest_seconds}s
+                    {item.target_weight_kg
+                      ? ` · ${formatWeight(item.target_weight_kg, units.weight)}`
+                      : ''}{' '}
+                    · descanso {item.rest_seconds}s
                   </Text>
                 </View>
               </View>
@@ -118,7 +143,13 @@ export default function PlanDetail() {
                 })
               }
             />
-            <Button title="Excluir" icon="trash-outline" variant="danger" style={{ flex: 1 }} onPress={onDelete} />
+            <Button
+              title="Excluir"
+              icon="trash-outline"
+              variant="danger"
+              style={{ flex: 1 }}
+              onPress={onDelete}
+            />
           </View>
         </>
       )}

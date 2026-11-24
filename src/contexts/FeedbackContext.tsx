@@ -56,7 +56,11 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo(() => ({ toast, confirm }), [toast, confirm]);
   const toneColor = { success: colors.success, error: colors.danger, info: colors.info };
-  const toneIcon = { success: 'checkmark-circle', error: 'alert-circle', info: 'information-circle' } as const;
+  const toneIcon = {
+    success: 'checkmark-circle',
+    error: 'alert-circle',
+    info: 'information-circle',
+  } as const;
 
   return (
     <FeedbackContext.Provider value={value}>
@@ -81,11 +85,20 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
           </Animated.View>
         ))}
       </View>
-      <Modal visible={!!dialog} transparent animationType="fade" onRequestClose={() => close(false)}>
-        <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={() => close(false)}>
+      <Modal
+        visible={!!dialog}
+        transparent
+        animationType="fade"
+        onRequestClose={() => close(false)}>
+        <Pressable
+          style={[styles.backdrop, { backgroundColor: colors.overlay }]}
+          onPress={() => close(false)}>
           <Pressable
             accessibilityViewIsModal
-            style={[styles.dialog, { backgroundColor: colors.surfaceRaised, borderColor: colors.border }]}
+            style={[
+              styles.dialog,
+              { backgroundColor: colors.surfaceRaised, borderColor: colors.border },
+            ]}
             onPress={() => undefined}>
             <Text variant="h3">{dialog?.title}</Text>
             <Text variant="bodySm" color="textMuted">
@@ -120,7 +133,13 @@ export function useFeedback(): FeedbackValue {
 }
 
 const styles = StyleSheet.create({
-  toastHost: { position: 'absolute', left: spacing.lg, right: spacing.lg, gap: spacing.sm, zIndex: 1000 },
+  toastHost: {
+    position: 'absolute',
+    left: spacing.lg,
+    right: spacing.lg,
+    gap: spacing.sm,
+    zIndex: 1000,
+  },
   toast: {
     flexDirection: 'row',
     alignItems: 'center',

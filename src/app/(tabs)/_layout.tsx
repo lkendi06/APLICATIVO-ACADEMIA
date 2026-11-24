@@ -8,7 +8,11 @@ export default function TabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <TabBar {...props} />}
-      screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: colors.background }, animation: 'shift' }}>
+      screenOptions={{
+        headerShown: false,
+        sceneStyle: { backgroundColor: colors.background },
+        animation: 'shift',
+      }}>
       <Tabs.Screen name="index" options={{ title: 'Início' }} />
       <Tabs.Screen name="workouts" options={{ title: 'Treinos' }} />
       <Tabs.Screen name="log" options={{ title: 'Registrar' }} />

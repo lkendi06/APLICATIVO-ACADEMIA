@@ -1,5 +1,12 @@
 import * as Haptics from 'expo-haptics';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { useTheme } from '@/theme/ThemeProvider';
@@ -67,10 +74,10 @@ export function Button({
       accessibilityState={{ disabled: !!isDisabled, busy: !!loading }}
       disabled={isDisabled}
       onPressIn={() => {
-        scale.value = withSpring(0.97, { damping: 20, stiffness: 400 });
+        scale.set(withSpring(0.97, { damping: 20, stiffness: 400 }));
       }}
       onPressOut={() => {
-        scale.value = withSpring(1, { damping: 18, stiffness: 300 });
+        scale.set(withSpring(1, { damping: 18, stiffness: 300 }));
       }}
       onPress={() => {
         if (Platform.OS !== 'web') Haptics.selectionAsync().catch(() => undefined);
@@ -95,10 +102,14 @@ export function Button({
       ) : (
         <View style={styles.row}>
           {icon ? <Icon name={icon} size={size === 'sm' ? 16 : 20} color={fgColor} /> : null}
-          <Text variant={size === 'sm' ? 'label' : 'bodyMedium'} style={{ color: fgColor, fontFamily: 'Inter_600SemiBold' }}>
+          <Text
+            variant={size === 'sm' ? 'label' : 'bodyMedium'}
+            style={{ color: fgColor, fontFamily: 'Inter_600SemiBold' }}>
             {title}
           </Text>
-          {iconRight ? <Icon name={iconRight} size={size === 'sm' ? 16 : 20} color={fgColor} /> : null}
+          {iconRight ? (
+            <Icon name={iconRight} size={size === 'sm' ? 16 : 20} color={fgColor} />
+          ) : null}
         </View>
       )}
     </AnimatedPressable>

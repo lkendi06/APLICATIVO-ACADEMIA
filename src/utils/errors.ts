@@ -7,10 +7,16 @@ export function friendlyError(error: unknown): string {
         ? String((error as { message: unknown }).message)
         : '';
   const code =
-    error && typeof error === 'object' && 'code' in error ? String((error as { code: unknown }).code) : '';
+    error && typeof error === 'object' && 'code' in error
+      ? String((error as { code: unknown }).code)
+      : '';
   const msg = raw.toLowerCase();
 
-  if (code === 'user_already_exists' || msg.includes('already registered') || msg.includes('already exists'))
+  if (
+    code === 'user_already_exists' ||
+    msg.includes('already registered') ||
+    msg.includes('already exists')
+  )
     return 'Já existe uma conta com este e-mail. Tente entrar ou recuperar a senha.';
   if (code === 'invalid_credentials' || msg.includes('invalid login credentials'))
     return 'E-mail ou senha incorretos.';
@@ -19,9 +25,17 @@ export function friendlyError(error: unknown): string {
   if (code === 'weak_password' || msg.includes('password should'))
     return 'A senha é fraca. Use ao menos 8 caracteres com letras maiúsculas, minúsculas e números.';
   if (code === 'same_password') return 'A nova senha precisa ser diferente da atual.';
-  if (code === 'over_email_send_rate_limit' || msg.includes('rate limit') || code === 'over_request_rate_limit')
+  if (
+    code === 'over_email_send_rate_limit' ||
+    msg.includes('rate limit') ||
+    code === 'over_request_rate_limit'
+  )
     return 'Muitas tentativas em pouco tempo. Aguarde um minuto e tente novamente.';
-  if (msg.includes('network request failed') || msg.includes('failed to fetch') || msg.includes('network'))
+  if (
+    msg.includes('network request failed') ||
+    msg.includes('failed to fetch') ||
+    msg.includes('network')
+  )
     return 'Sem conexão com o servidor. Verifique sua internet.';
   if (code === 'otp_expired' || msg.includes('expired'))
     return 'Este link expirou. Solicite um novo.';

@@ -12,10 +12,7 @@ import { isNetworkError } from '@/utils/errors';
  * no AsyncStorage e enviada quando a conexão voltar.
  */
 
-export type SyncTable =
-  | 'workout_sessions'
-  | 'workout_session_exercises'
-  | 'workout_sets';
+export type SyncTable = 'workout_sessions' | 'workout_session_exercises' | 'workout_sets';
 
 export type OutboxOp = {
   key: string; // `${table}:${id}`

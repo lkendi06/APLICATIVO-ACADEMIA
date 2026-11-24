@@ -33,14 +33,16 @@ export default function ForgotPassword() {
   if (sentTo) {
     return (
       <Screen back>
-        <Animated.View entering={FadeIn} style={{ gap: spacing.md, alignItems: 'center', paddingVertical: spacing.xxxl }}>
+        <Animated.View
+          entering={FadeIn}
+          style={{ gap: spacing.md, alignItems: 'center', paddingVertical: spacing.xxxl }}>
           <Icon name="paper-plane-outline" size={44} color="primaryText" />
           <Text variant="h1" align="center">
             Verifique seu e-mail
           </Text>
           <Text color="textMuted" align="center">
-            Se existir uma conta para {sentTo}, você receberá um link para criar uma nova senha. Abra o link
-            neste celular.
+            Se existir uma conta para {sentTo}, você receberá um link para criar uma nova senha.
+            Abra o link neste celular.
           </Text>
         </Animated.View>
         <Button title="Voltar para o login" onPress={() => router.replace('/sign-in')} />
@@ -52,7 +54,9 @@ export default function ForgotPassword() {
     <Screen back>
       <View style={{ gap: spacing.xs }}>
         <Text variant="h1">Recuperar senha</Text>
-        <Text color="textMuted">Informe o e-mail da sua conta e enviaremos um link de redefinição.</Text>
+        <Text color="textMuted">
+          Informe o e-mail da sua conta e enviaremos um link de redefinição.
+        </Text>
       </View>
       <Controller
         control={control}
@@ -81,7 +85,13 @@ export default function ForgotPassword() {
           </Text>
         </Card>
       ) : null}
-      <Button title="Enviar link" size="lg" loading={isSubmitting} onPress={onSubmit} testID="forgot-submit" />
+      <Button
+        title="Enviar link"
+        size="lg"
+        loading={isSubmitting}
+        onPress={onSubmit}
+        testID="forgot-submit"
+      />
     </Screen>
   );
 }

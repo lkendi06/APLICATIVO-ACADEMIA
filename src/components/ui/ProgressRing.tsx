@@ -3,7 +3,13 @@ import Svg, { Circle } from 'react-native-svg';
 
 import { useTheme } from '@/theme/ThemeProvider';
 
-type Props = { progress: number; size?: number; stroke?: number; children?: React.ReactNode; color?: string };
+type Props = {
+  progress: number;
+  size?: number;
+  stroke?: number;
+  children?: React.ReactNode;
+  color?: string;
+};
 
 export function ProgressRing({ progress, size = 76, stroke = 8, children, color }: Props) {
   const { colors } = useTheme();
@@ -13,7 +19,14 @@ export function ProgressRing({ progress, size = 76, stroke = 8, children, color 
   return (
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
       <Svg width={size} height={size} style={{ position: 'absolute' }}>
-        <Circle cx={size / 2} cy={size / 2} r={r} stroke={colors.surfaceAlt} strokeWidth={stroke} fill="none" />
+        <Circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          stroke={colors.surfaceAlt}
+          strokeWidth={stroke}
+          fill="none"
+        />
         <Circle
           cx={size / 2}
           cy={size / 2}

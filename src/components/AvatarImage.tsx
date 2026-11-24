@@ -5,7 +5,15 @@ import { Text } from '@/components/ui/Text';
 import { useAvatarUrl } from '@/hooks/queries';
 import { useTheme } from '@/theme/ThemeProvider';
 
-export function AvatarImage({ path, name, size = 44 }: { path?: string | null; name?: string | null; size?: number }) {
+export function AvatarImage({
+  path,
+  name,
+  size = 44,
+}: {
+  path?: string | null;
+  name?: string | null;
+  size?: number;
+}) {
   const { colors } = useTheme();
   const { data: url } = useAvatarUrl(path);
   const initials = (name ?? '')
@@ -19,7 +27,12 @@ export function AvatarImage({ path, name, size = 44 }: { path?: string | null; n
       <Image
         source={{ uri: url }}
         cachePolicy="memory-disk"
-        style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: colors.surfaceAlt }}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: colors.surfaceAlt,
+        }}
         accessibilityLabel="Foto de perfil"
       />
     );

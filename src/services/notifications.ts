@@ -23,6 +23,7 @@ function configure() {
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
       name: 'Treinos',
+      // eslint-disable-next-line import/namespace -- reexportado pelo pacote; o tsc valida
       importance: Notifications.AndroidImportance.HIGH,
     }).catch(() => undefined);
   }
@@ -48,8 +49,14 @@ export const notificationService = {
   async scheduleRestEnd(seconds: number, exerciseName: string): Promise<string | null> {
     if (!(await notificationService.hasPermission())) return null;
     return Notifications.scheduleNotificationAsync({
-      content: { title: 'Descanso concluído', body: `Hora da próxima série de ${exerciseName}! 💪` },
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, seconds: Math.max(1, seconds) },
+      content: {
+        title: 'Descanso concluído',
+        body: `Hora da próxima série de ${exerciseName}! 💪`,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: Math.max(1, seconds),
+      },
     });
   },
 
@@ -70,7 +77,10 @@ export const notificationService = {
     for (const d of weekdays) {
       await Notifications.scheduleNotificationAsync({
         identifier: `reminder-${d}`,
-        content: { title: 'Hora do treino! 🏋️', body: 'Seu treino de hoje está esperando no FitTrack.' },
+        content: {
+          title: 'Hora do treino! 🏋️',
+          body: 'Seu treino de hoje está esperando no FitTrack.',
+        },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
           // expo: 1 = domingo … 7 = sábado
@@ -87,7 +97,9 @@ export const notificationService = {
     if (Platform.OS === 'web') return;
     const all = await Notifications.getAllScheduledNotificationsAsync();
     await Promise.all(
-      all.filter((n) => n.identifier.startsWith('reminder-')).map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier)),
+      all
+        .filter((n) => n.identifier.startsWith('reminder-'))
+        .map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier)),
     );
   },
 };

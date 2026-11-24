@@ -17,7 +17,12 @@ export function PasswordStrength({ password }: { password: string }) {
         {[0, 1, 2, 3].map((i) => (
           <View
             key={i}
-            style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i < score ? color : colors.surfaceAlt }}
+            style={{
+              flex: 1,
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: i < score ? color : colors.surfaceAlt,
+            }}
           />
         ))}
       </View>

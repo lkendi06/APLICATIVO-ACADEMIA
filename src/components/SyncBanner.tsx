@@ -30,8 +30,14 @@ export function SyncBanner() {
           borderRadius: radii.md,
           backgroundColor: online ? colors.surfaceAlt : colors.warningSoft,
         }}>
-        <Icon name={online ? 'sync-outline' : 'cloud-offline-outline'} size={18} color={online ? 'textMuted' : 'warning'} />
-        <Text variant="caption" style={{ flex: 1, color: online ? colors.textMuted : colors.warning }}>
+        <Icon
+          name={online ? 'sync-outline' : 'cloud-offline-outline'}
+          size={18}
+          color={online ? 'textMuted' : 'warning'}
+        />
+        <Text
+          variant="caption"
+          style={{ flex: 1, color: online ? colors.textMuted : colors.warning }}>
           {msg}
         </Text>
       </View>

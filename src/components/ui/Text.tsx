@@ -3,7 +3,9 @@ import { Text as RNText, type TextProps as RNTextProps } from 'react-native';
 import { useTheme } from '@/theme/ThemeProvider';
 import { typography, type TypographyVariant, type ColorTokens } from '@/theme/tokens';
 
-type ColorKey = { [K in keyof ColorTokens]: ColorTokens[K] extends string ? K : never }[keyof ColorTokens];
+type ColorKey = {
+  [K in keyof ColorTokens]: ColorTokens[K] extends string ? K : never;
+}[keyof ColorTokens];
 
 export type TextProps = RNTextProps & {
   variant?: TypographyVariant;
@@ -12,7 +14,14 @@ export type TextProps = RNTextProps & {
   tabular?: boolean;
 };
 
-export function Text({ variant = 'body', color = 'text', align, tabular, style, ...rest }: TextProps) {
+export function Text({
+  variant = 'body',
+  color = 'text',
+  align,
+  tabular,
+  style,
+  ...rest
+}: TextProps) {
   const { colors } = useTheme();
   return (
     <RNText

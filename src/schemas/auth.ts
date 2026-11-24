@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
-const email = z
-  .string()
-  .trim()
-  .min(1, 'Informe seu e-mail.')
-  .email('E-mail inválido.');
+const email = z.string().trim().min(1, 'Informe seu e-mail.').email('E-mail inválido.');
 
 export const passwordRules = z
   .string()
@@ -50,6 +46,22 @@ export const resetSchema = z
     message: 'As senhas não coincidem.',
   });
 export type ResetValues = z.infer<typeof resetSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    current: z.string().min(1, 'Informe a senha atual.'),
+    password: passwordRules,
+    confirmPassword: z.string().min(1, 'Confirme a nova senha.'),
+  })
+  .refine((v) => v.password === v.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'As senhas não coincidem.',
+  })
+  .refine((v) => v.password !== v.current, {
+    path: ['password'],
+    message: 'A nova senha deve ser diferente da atual.',
+  });
+export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 
 /** Força da senha de 0 a 4 (feedback visual no cadastro). */
 export function passwordStrength(pw: string): number {

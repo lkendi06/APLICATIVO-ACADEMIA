@@ -10,12 +10,16 @@ export function ConfigMissing() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.root, { backgroundColor: colors.background, paddingTop: insets.top + spacing.xxl }]}>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: colors.background, paddingTop: insets.top + spacing.xxl },
+      ]}>
       <Icon name="construct-outline" size={40} color="warning" />
       <Text variant="h2">Configuração necessária</Text>
       <Text color="textMuted">
-        O FitTrack precisa das credenciais do Supabase para funcionar. Crie o arquivo .env na raiz do
-        projeto a partir do .env.example e reinicie o servidor do Expo.
+        O FitTrack precisa das credenciais do Supabase para funcionar. Crie o arquivo .env na raiz
+        do projeto a partir do .env.example e reinicie o servidor do Expo.
       </Text>
       <Card tone="alt">
         <Text variant="caption" style={{ fontFamily: 'monospace' }}>

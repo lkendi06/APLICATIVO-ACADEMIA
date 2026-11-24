@@ -25,6 +25,9 @@ export const avatarService = {
     if (error) return null;
     return data.signedUrl;
   },
+  async remove(path: string) {
+    await supabase.storage.from('avatars').remove([path]);
+  },
   async removeAll(userId: string) {
     const { data } = await supabase.storage.from('avatars').list(userId);
     if (data?.length) {
@@ -60,12 +63,18 @@ export const accountService = {
     }
     const json = JSON.stringify(result, null, 2);
     if (Platform.OS === 'web') return { fileUri: null, json };
-    const file = new File(Paths.cache, `fittrack-dados-${new Date().toISOString().slice(0, 10)}.json`);
+    const file = new File(
+      Paths.cache,
+      `fittrack-dados-${new Date().toISOString().slice(0, 10)}.json`,
+    );
     if (file.exists) file.delete();
     file.create();
     file.write(json);
     if (await Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: 'Exportar meus dados' });
+      await Sharing.shareAsync(file.uri, {
+        mimeType: 'application/json',
+        dialogTitle: 'Exportar meus dados',
+      });
     }
     return { fileUri: file.uri, json };
   },

@@ -108,7 +108,11 @@ export default function SignIn() {
 
       {formError ? (
         <Card tone="alt" style={{ borderColor: 'transparent' }}>
-          <Text variant="bodySm" color="danger" testID="sign-in-error" accessibilityLiveRegion="polite">
+          <Text
+            variant="bodySm"
+            color="danger"
+            testID="sign-in-error"
+            accessibilityLiveRegion="polite">
             {formError}
           </Text>
           {unconfirmedEmail ? (
@@ -117,13 +121,21 @@ export default function SignIn() {
               variant="ghost"
               size="sm"
               style={{ alignSelf: 'flex-start', paddingHorizontal: 0 }}
-              onPress={() => router.push({ pathname: '/verify-email', params: { email: unconfirmedEmail } })}
+              onPress={() =>
+                router.push({ pathname: '/verify-email', params: { email: unconfirmedEmail } })
+              }
             />
           ) : null}
         </Card>
       ) : null}
 
-      <Button title="Entrar" size="lg" loading={isSubmitting} onPress={onSubmit} testID="sign-in-submit" />
+      <Button
+        title="Entrar"
+        size="lg"
+        loading={isSubmitting}
+        onPress={onSubmit}
+        testID="sign-in-submit"
+      />
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.xs }}>
         <Text variant="bodySm" color="textMuted">

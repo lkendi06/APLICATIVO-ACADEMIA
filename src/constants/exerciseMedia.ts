@@ -11,7 +11,7 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaAsset> = {
     gif: require('../../assets/exercises/abs/elevacao-de-pernas.gif'),
     poster: require('../../assets/exercises/abs/elevacao-de-pernas.png'),
   },
-  'prancha': {
+  prancha: {
     gif: require('../../assets/exercises/abs/prancha.gif'),
     poster: require('../../assets/exercises/abs/prancha.png'),
   },
@@ -67,7 +67,7 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaAsset> = {
     gif: require('../../assets/exercises/chest/supino-reto.gif'),
     poster: require('../../assets/exercises/chest/supino-reto.png'),
   },
-  'afundo': {
+  afundo: {
     gif: require('../../assets/exercises/legs/afundo.gif'),
     poster: require('../../assets/exercises/legs/afundo.png'),
   },
@@ -103,7 +103,7 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaAsset> = {
     gif: require('../../assets/exercises/legs/ponte-de-gluteo.gif'),
     poster: require('../../assets/exercises/legs/ponte-de-gluteo.png'),
   },
-  'stiff': {
+  stiff: {
     gif: require('../../assets/exercises/legs/stiff.gif'),
     poster: require('../../assets/exercises/legs/stiff.png'),
   },

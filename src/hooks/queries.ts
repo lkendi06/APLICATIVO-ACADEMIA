@@ -18,7 +18,11 @@ import type { Profile, UserGoal, UserPreferences } from '@/types/database';
 // ---- Perfil -----------------------------------------------------------------
 export function useProfile() {
   const uid = useUserId();
-  return useQuery({ queryKey: qk.profile(uid), queryFn: () => profileApi.get(uid), enabled: !!uid });
+  return useQuery({
+    queryKey: qk.profile(uid),
+    queryFn: () => profileApi.get(uid),
+    enabled: !!uid,
+  });
 }
 
 export function useUpdateProfile() {
@@ -80,7 +84,9 @@ export function useExercise(id: string | undefined) {
     queryFn: () => exerciseApi.get(id!),
     enabled: !!id,
     initialData: () =>
-      qc.getQueryData<Awaited<ReturnType<typeof exerciseApi.list>>>(qk.exercises)?.find((e) => e.id === id),
+      qc
+        .getQueryData<Awaited<ReturnType<typeof exerciseApi.list>>>(qk.exercises)
+        ?.find((e) => e.id === id),
   });
 }
 
@@ -91,7 +97,8 @@ export function useFavorites() {
 export function useToggleFavorite() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, favorite }: { id: string; favorite: boolean }) => exerciseApi.setFavorite(id, favorite),
+    mutationFn: ({ id, favorite }: { id: string; favorite: boolean }) =>
+      exerciseApi.setFavorite(id, favorite),
     onMutate: async ({ id, favorite }) => {
       const prev = qc.getQueryData<string[]>(qk.favorites) ?? [];
       qc.setQueryData(qk.favorites, favorite ? [...prev, id] : prev.filter((x) => x !== id));
@@ -159,7 +166,11 @@ export function useSessionStats(params?: { from?: Date; to?: Date; limit?: numbe
 }
 
 export function useSessionDetail(id: string | undefined) {
-  return useQuery({ queryKey: qk.session(id ?? ''), queryFn: () => sessionApi.detail(id!), enabled: !!id });
+  return useQuery({
+    queryKey: qk.session(id ?? ''),
+    queryFn: () => sessionApi.detail(id!),
+    enabled: !!id,
+  });
 }
 
 export function useDeleteSession() {
@@ -216,8 +227,13 @@ export function useGoals() {
 export function useSaveGoal() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id?: string; input: Pick<UserGoal, 'type' | 'title'> & Partial<UserGoal> }) =>
-      id ? goalsApi.update(id, input) : goalsApi.create(input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id?: string;
+      input: Pick<UserGoal, 'type' | 'title'> & Partial<UserGoal>;
+    }) => (id ? goalsApi.update(id, input) : goalsApi.create(input)),
     onSuccess: () => qc.invalidateQueries({ queryKey: qk.goals }),
   });
 }

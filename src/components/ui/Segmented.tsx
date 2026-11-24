@@ -38,7 +38,10 @@ export function Segmented<T extends string>({ options, value, onChange, scrollab
   return (
     <View style={[styles.wrap, { backgroundColor: colors.surfaceAlt }]} accessibilityRole="tablist">
       {scrollable ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 4 }}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 4 }}>
           {items}
         </ScrollView>
       ) : (

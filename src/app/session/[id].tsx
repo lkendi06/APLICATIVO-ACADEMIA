@@ -86,13 +86,17 @@ export default function LiveSession() {
     qc.invalidateQueries({ queryKey: ['exercise-progress'] });
     qc.invalidateQueries({ queryKey: ['previous-sets'] });
     qc.invalidateQueries({ queryKey: ['trained-exercises'] });
-    router.replace({ pathname: '/session/summary/[id]', params: { id: sessionId ?? id, fresh: '1' } });
+    router.replace({
+      pathname: '/session/summary/[id]',
+      params: { id: sessionId ?? id, fresh: '1' },
+    });
   };
 
   const discard = async () => {
     const ok = await confirm({
       title: 'Descartar treino?',
-      message: 'Todas as séries registradas nesta sessão serão apagadas. Esta ação não pode ser desfeita.',
+      message:
+        'Todas as séries registradas nesta sessão serão apagadas. Esta ação não pode ser desfeita.',
       confirmLabel: 'Descartar',
       destructive: true,
     });
@@ -104,13 +108,25 @@ export default function LiveSession() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <View style={[styles.header, { paddingTop: insets.top + spacing.sm, borderBottomColor: colors.border }]}>
-        <IconButton icon="chevron-down" label="Minimizar treino" onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))} />
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + spacing.sm, borderBottomColor: colors.border },
+        ]}>
+        <IconButton
+          icon="chevron-down"
+          label="Minimizar treino"
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+        />
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text variant="label" numberOfLines={1}>
             {session.name}
           </Text>
-          <Text variant="h2" tabular color={paused ? 'warning' : 'text'} accessibilityLabel={`Tempo de treino ${formatClock(elapsed)}`}>
+          <Text
+            variant="h2"
+            tabular
+            color={paused ? 'warning' : 'text'}
+            accessibilityLabel={`Tempo de treino ${formatClock(elapsed)}`}>
             {formatClock(elapsed)}
           </Text>
         </View>
@@ -131,7 +147,11 @@ export default function LiveSession() {
 
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg, paddingBottom: insets.bottom + 220 }}>
+        contentContainerStyle={{
+          padding: spacing.lg,
+          gap: spacing.lg,
+          paddingBottom: insets.bottom + 220,
+        }}>
         <SyncBanner />
         {paused ? (
           <Text variant="bodySm" color="warning" align="center">
@@ -139,19 +159,44 @@ export default function LiveSession() {
           </Text>
         ) : null}
         {exercises.length === 0 ? (
-          <EmptyState icon="add-circle-outline" title="Adicione exercícios" message="Escolha os exercícios na biblioteca e registre suas séries." />
+          <EmptyState
+            icon="add-circle-outline"
+            title="Adicione exercícios"
+            message="Escolha os exercícios na biblioteca e registre suas séries."
+          />
         ) : (
           exercises.map((ex, i) => (
-            <SessionExerciseCard key={ex.id} item={ex} index={i} sessionId={session.id} sets={sets.filter((s) => s.session_exercise_id === ex.id)} />
+            <SessionExerciseCard
+              key={ex.id}
+              item={ex}
+              index={i}
+              sessionId={session.id}
+              sets={sets.filter((s) => s.session_exercise_id === ex.id)}
+            />
           ))
         )}
-        <Button title="Adicionar exercício" icon="add" variant="outline" onPress={addExercises} testID="session-add-exercise" />
+        <Button
+          title="Adicionar exercício"
+          icon="add"
+          variant="outline"
+          onPress={addExercises}
+          testID="session-add-exercise"
+        />
         <Button title="Descartar treino" icon="trash-outline" variant="ghost" onPress={discard} />
       </ScrollView>
 
-      <View style={[styles.bottom, { paddingBottom: insets.bottom + spacing.md }]} pointerEvents="box-none">
+      <View
+        style={[styles.bottom, { paddingBottom: insets.bottom + spacing.md }]}
+        pointerEvents="box-none">
         <RestTimer />
-        <Button title="Finalizar treino" icon="flag" size="lg" loading={finishing} onPress={finish} testID="session-finish" />
+        <Button
+          title="Finalizar treino"
+          icon="flag"
+          size="lg"
+          loading={finishing}
+          onPress={finish}
+          testID="session-finish"
+        />
       </View>
     </View>
   );
@@ -171,7 +216,21 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.lg, paddingBottom: spacing.md, borderBottomWidth: StyleSheet.hairlineWidth },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   statsBar: { flexDirection: 'row', paddingVertical: spacing.sm },
-  bottom: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: spacing.lg, gap: spacing.md },
+  bottom: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: spacing.lg,
+    gap: spacing.md,
+  },
 });
