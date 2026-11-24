@@ -1,3 +1,5 @@
+import './cryptoPolyfill';
+
 import { createClient } from '@supabase/supabase-js';
 import { AppState, Platform } from 'react-native';
 
