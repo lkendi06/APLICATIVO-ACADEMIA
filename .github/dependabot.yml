@@ -12,9 +12,12 @@ updates:
       testing:
         patterns: ['jest', 'jest-*', '@testing-library/*', '@types/jest']
     ignore:
-      # O SDK do Expo define as versões compatíveis; atualize com `npx expo install --fix`.
+      # Versões novas "major" costumam quebrar a compatibilidade com o SDK do Expo.
+      # Atualize o SDK com `npx expo install expo@latest --fix` quando quiser.
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
       - dependency-name: 'react-native'
-        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+        update-types: ['version-update:semver-minor']
   - package-ecosystem: github-actions
     directory: /
     schedule:
